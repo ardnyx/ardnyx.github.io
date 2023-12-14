@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Products</title>
+    <!-- Add Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Add your styles here */
+
+        body {
+            background: url('https://scontent.fmnl4-2.fna.fbcdn.net/v/t1.15752-9/385530707_313004944976112_2759597517287644661_n.png?_nc_cat=105&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=hs5lLNmHqKIAX9TqWoo&_nc_ht=scontent.fmnl4-2.fna&oh=03_AdTjHWmhGz1pAZezTo5toeT4dWCxuVIxI7XCvp95MVTGSg&oe=659F989C') center center fixed;
+            margin-top: 150px;
+            margin-right:100px;
+        }
+        
+
+        header {
+
+position: absolute;
+
+top: 0;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+width: 100%;
+height:90px;
+
+padding: 2px;
+
+background-color: #f2ebc7;
+
+z-index: 1000; /* Set a high z-index to ensure it appears above other elements */
+font-size: 20px;
+}
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product {
+            font-family: "Trebuchet MS", Tahoma, sans-serif;
+            border: none;
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            text-align: left;
+            background-color: #DCA12E;
+            color: black;
+            border-radius: 8px;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            /* Add transform to the transition */
+            margin-left: 60px;
+        }
+
+        .product:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+            /* Add this line for the zoom effect on hover */
+        }
+
+        #shopping-cart {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    background-color: #fdf58c;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+        .shopping-cart-text {
+            margin-top: 5px;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+            
+        }
+
+        .cart-items {
+            list-style-type: none;
+            padding: 0px;
+            margin: 0;
+        }
+
+        .cart-icon {
+            cursor: pointer;
+            font-size: 40px;
+            position: absolute;
+            top: 145px;
+            /* Adjust the top position as needed */
+            color: #dca12e;
+            left: 1750px;
+            /* Adjust the right position as needed */
+            
+        }
+        
+        
+
+        .add-to-cart {
+            cursor: pointer;
+            color: #007bff;
+            /* Blue color for the plus icon */
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .checkout-button {
+            padding: 9px 17px;
+            background-color: #dca12e;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+            /* Adjust margin as needed */
+            margin-left: 22px;
+        }
+
+        .checkout-button:hover {
+            background-color: #f3dd62;
+        }
+
+        .designbutton {
+            padding: 15px;
+            /* Increased padding for a larger button */
+            font-size: 18px;
+            /* Increased font size for a larger button */
+            border-radius: 5px;
+            background-color: #DCA12E;
+            border: none;
+            color: #FFFFFF;
+            text-align: center;
+            display: inline-block;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            
+            transform: translate(-5%, 100%);
+           
+            
+        }
+
+        .designbutton1 {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    background-color: #DCA12E;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    display: inline-block;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    margin: 20px 4px 4px 100px; /* Updated margin for top, right, bottom, and left */
+}
+
+
+        .designbutton2 {
+            padding: 5px;
+            /* Increased padding for a larger button */
+            font-size: 14px;
+            /* Increased font size for a larger button */
+            border-radius: 3px;
+            background-color: #DCA12E;
+            border: none;
+            color: #FFFFFF;
+            text-align: center;
+            display: inline-block;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .designbutton:hover,
+        .designbutton1:hover,
+        .designbutton2:hover {
+            background-color: #F3DD62;
+            /* Add a dark yellow color on hover */
+            color: white;
+            
+        }
+
+        /* Add your styles here */
+
+        #search-container {
+            display: flex;
+            align-items: center;
+            margin-right: 2px;
+        }
+
+        #search-input {
+            padding: 5px;
+            margin-right: px;
+            margin-left: 1300px;
+            margin-top: 0px;
+            margin-bottom: 20px;
+            transform: translate(-5%, -5%);
+            border: 1px solid #dca12e; 
+            border-radius: 3px;
+            border-color: #dca12e;
+            width:300px;
+            height:30px;
+            text-align: center;
+        }
+
+        #search-button {
+            padding: 5px 15px;
+            background-color: #dca12e;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transform: translate(-5%, -5%);
+            margin-bottom: 100px;
+        }
+
+        #search-button:hover {
+            background-color: #f3dd62;
+        }
+        
+        img {
+
+height: 100px; /* Adjust the height as needed */
+
+width: auto; /* Maintain aspect ratio */
+
+
+}
+
+
+section {
+
+text-align: center;
+
+margin: 20px;
+
+}
+
+
+
+
+nav {
+
+display: flex;
+
+}
+
+
+nav a {
+
+padding: 10px;
+
+color: #DCA12E;
+
+text-decoration: none;
+
+}
+
+
+.contact-icon {
+
+font-size: 1.5em;
+
+color: #DCA12E;
+
+margin-left: 20px;
+
+margin-right: 20px;
+
+margin-top: 7px;
+
+cursor: pointer;
+
+}
+.cart-icon:hover {
+    color: #3498db; /* Change the color on hover as needed */
+}
+
+#shopping-cart {
+    display: none;
+    position: fixed;
+    right: 20px;
+    top: 60px;
+    background-color: #fff;
+    border: 1px solid #DCA12E;
+    color:#DCA12E;
+
+    padding: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+#shopping-cart.active {
+    display: block;
+}
+footer {
+
+text-align: center;
+
+padding: 10px;
+
+}
+
+.footer-link {
+
+text-decoration: none;
+
+color: #DCA12E;
+
+position: relative;
+font-size: 18px;
+
+}
+
+
+.footer-link::before {
+
+content: "";
+
+position: absolute;
+
+width: 100%;
+
+height: 2px;
+
+bottom: 0;
+
+left: 0;
+
+background-color: #DCA12E;
+
+transform: scaleX(0);
+
+transform-origin: right;
+
+transition: transform 0.3s ease;
+
+}
+
+
+.footer-link:hover::before {
+
+transform: scaleX(1);
+
+transform-origin: left;
+
+}
+
+.footer {
+
+background-color:#f2ebc7;
+
+color: #DCA12E;
+width: 106%;
+
+}
+
+
+.footer-container {
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+padding: 10px;
+
+
+
+}
+
+
+.footer-column {
+
+flex-basis: 30%;
+
+}
+
+
+.footer-heading {
+
+font-size: 18px;
+
+margin-bottom: 0px;
+
+margin: auto;
+
+}
+
+
+.footer-newsletter-form {
+
+display: flex;
+
+align-items: center;
+
+}
+
+
+.footer-newsletter-form input {
+
+flex: 1;
+
+padding: 10px;
+
+border: 1px solid yellow;
+
+border-radius: 4px;
+
+}
+
+
+.footer-newsletter-form button {
+
+margin-left: 10px;
+
+padding: 10px;
+
+background-color: #ffffff;
+
+color: #000000;
+
+border-radius: 4px;
+
+}
+
+
+.footer-social-links {
+
+display: flex;
+
+align-items: center;
+
+}
+
+
+.footer-social-links li {
+
+display: inline-block;
+
+margin-right: 10px;
+
+}
+
+
+.footer-social-links a {
+
+color: #DCA12E;
+
+font-size: 20px;
+
+}
+
+
+.footer-social-links a:hover {
+
+color:white;
+
+}
+
+
+.newsletter-form {
+
+text-align: center;
+
+margin: 20px;
+
+width: 50%;
+
+display: flex;
+
+flex-direction: column;
+
+align-items: center;
+
+}
+
+
+.newsletter-form input {
+
+padding: 10px;
+
+margin: 5px;
+
+width: 100%;
+
+box-sizing: border-box;
+
+}
+
+
+.newsletter-form h2 {
+
+margin-left: 12px;
+
+color: black;
+
+}
+
+
+.newsletter-form button {
+
+padding: 15px;
+
+background-color: #ffc566;
+
+color: #fff;
+
+border: none;
+
+cursor: pointer;
+
+border-radius: 25px;
+
+margin-top: 10px;
+
+width: 100%;
+
+}
+
+
+.newsletter-form button:hover {
+
+background-color: #e6a016;
+
+}
+
+.footer-social-links,
+
+.footer-contact {
+
+flex-basis: 40%;
+
+}
+
+
+.footer-column {
+
+display: auto;
+
+flex-wrap: wrap;
+
+}
+
+
+.footer-social-links,
+
+.footer-contact {
+
+margin-bottom: auto;
+
+}
+
+
+.footer-social-links h3,
+
+.footer-contact h3 {
+
+margin-bottom: 20px;
+
+font-size: 18px;
+
+}
+
+
+.footer-social-links li {
+
+display: inline-block;
+
+margin-right: 10px;
+
+}
+
+
+
+.footer-social-links a {
+
+color: #DCA12E;
+
+font-size: 20px;
+
+text-decoration: none;
+
+
+
+
+
+}
+
+
+.footer-social-links a:hover {
+
+color: white;
+
+}
+
+
+.footer-contact p {
+
+margin: auto;
+
+color: #DCA12E;
+
+font-size: 20px;
+
+}
+
+.footer-social-links{
+
+padding-bottom:auto;
+
+}    
+
+
+        
+    </style>
+</head>
+<body>
+    <header>
+
+        <div>
+
+            <img src="https://scontent.fmnl3-4.fna.fbcdn.net/v/t1.15752-9/403612200_1005844493848944_6943229499898744737_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHMSTCl6tKQL0r0dYh2RnSJWmuR1mU15kBaa5HWZTXmQIkEPD7P9xjbIsNAlc59BnukOgYEnBK4Bm5n4zx4smp3&_nc_ohc=eacmqUgPSnUAX9dTJkf&_nc_ht=scontent.fmnl3-4.fna&oh=03_AdTrVfNC9wSWuuncru2ciln002Z7jHkRXSXRIXB7J5BLjA&oe=6597D124" alt="Logo">
+
+        </div>
+
+        <nav>
+
+            <a href="index.html">Home</a>
+
+            <a href="products.html">Products</a>
+
+            <a href="services.html">Services</a>
+
+            <a href="daycare.html">Daycare</a>
+
+            <a href="about.html">About</a>
+
+            <a href="contact.html">Contact</a>
+
+            <span class="contact-icon signin-link" onclick="window.location.href='signin.html'"><i class="fas fa-user"></i></span>
+
+        </nav>
+
+    </header>
+
+    <div style="float: right; margin-top: -55px; margin-right: 1580px;">
+        <select id="product-filter" class="designbutton" onchange="filterProducts()">
+            <option value="all">All Products</option>
+            <option value="dogs">For Dogs</option>
+            <option value="cats">For Cats</option>
+        </select>
+    </div>
+    
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search products..." oninput="filterAndSearchProducts()">
+        <button id="search-button" class="designbutton" onclick="searchProducts()">Search</button>
+
+    </div>
+    
+        
+<div class="product-container" id="product-container">
+    <div class="product" data-category="cats">Cat Product 1</div>
+    <div class="product" data-category="dogs">Dog Product 1</div>
+    <div class="product" data-category="cats">Cat Product 2</div>
+
+</div>
+
+<div id="shopping-cart">
+    <h2 class="shopping-cart-text">Shopping Cart</h2>
+    <ul id="cart-items"></ul>
+    <button class="checkout-button" onclick="submitCart()">Checkout</button>
+</div>
+
+<div class="cart-icon" onclick="toggleShoppingCart()">
+    <i class="fas fa-shopping-cart"></i>
+</div>
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-column">
+
+                <img src="https://scontent.fmnl3-4.fna.fbcdn.net/v/t1.15752-9/403612200_1005844493848944_6943229499898744737_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHMSTCl6tKQL0r0dYh2RnSJWmuR1mU15kBaa5HWZTXmQIkEPD7P9xjbIsNAlc59BnukOgYEnBK4Bm5n4zx4smp3&_nc_ohc=eacmqUgPSnUAX9dTJkf&_nc_ht=scontent.fmnl3-4.fna&oh=03_AdTrVfNC9wSWuuncru2ciln002Z7jHkRXSXRIXB7J5BLjA&oe=6597D124" alt="PAWDAY logo">
+
+            <p>Create Purr-fect Moments for Your Fur-Ever Friends!</p>
+
+            <a href="about.html" class="footer-link">About</a>
+
+<span>&nbsp|&nbsp</span>
+
+            <a href="products.html" class="footer-link">Products</a>
+
+<span>&nbsp|&nbsp</span>
+
+            <a href="services.html" class="footer-link">Services</a>
+
+<span>&nbsp|&nbsp</span>
+
+            <a href="daycare.html" class="footer-link">Daycare</a>
+
+<span>&nbsp|&nbsp</span>
+
+            <a href="contact.html" class="footer-link">Contact</a>
+
+<span>&nbsp|&nbsp</span>
+
+        <a href="privacy.html" class="footer-link">Privacy Policy</a>
+
+        <span>&nbsp|&nbsp</span>
+
+        <a href="terms.html" class="footer-link">Terms and Conditions</a>
+
+        </div>
+
+
+        <div class="newsletter-form">
+
+            <p>Subscribe to our newsletter for the latest pawsome tips.</p>
+
+            <form id="newsletterForm">
+
+                <input type="email" name="email" placeholder="Enter your email" required>
+
+                <button type="submit">PAW-SCRIBE</button>
+
+            </form><br>
+
+       <p style = "color: white;"><center>&copy; 2023 PawDay. All rights reserved.</p>
+
+        </div>
+
+
+        <div class="footer-container">
+
+            <div class="footer-column footer-social-links">
+
+                <h3 class="footer-heading">FOLLOW US</h3>
+
+                <div class ="logo">
+
+                <ul class="footer-social-links">
+
+                    <li>
+
+                        <a href="https://www.facebook.com/profile.php?id=61554264143659" class="social-icon"><i class="fab fa-facebook"></i></a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="https://www.instagram.com/pawdayofficial/" class="social-icon"><i class="fab fa-instagram"></i></a>
+
+                    </li>
+
+                </ul>
+
+             </div>
+
+            </div>
+
+
+            <div class="footer-column footer-contact">
+
+                <h3 class="footer-heading">CONTACT US</h3>
+
+                <p>0976 328 9650</p>
+
+            </div>
+
+    </div>
+
+</footer>
+
+
+    <script>
+        const productsForDogs = [
+            { name: 'Planet Dog Squak Ball', type: 'dogs', price: '₱150', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/393150599_1041541713764809_373175178567252535_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFO6EPlbZuutulbLudTDkxaCTbvpGmDsIcJNu-kaYOwh4LqSBgkN_e0wmIOBk9j8e0AgAEht5tXRdzUrv_IFWjx&_nc_ohc=rbaqsjqGXJwAX_IXSuv&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdSJqRdoENMg0lRg_4TwiyWJRuoQYeLwJoUIVMkrS2q0LA&oe=659F3A48' },
+            { name: 'Zee Dog Leash', type: 'dogs', price: '₱250', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/407102353_1833927347058751_8206348056330297543_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeGPJnm1tT-bMZY3r-bI7btX4eqjb5WNSvHh6qNvlY1K8XeFnCh1_5d-AMjWoAu3ZsxEck4VVfo4M2plBnHpgklu&_nc_ohc=lgvfCXwCPbUAX-XLbdF&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdTBHGjlC72K2z0FErkck9OXat2484873m5VaiuyYlYaWg&oe=659F3014' },
+            { name: 'Zee Dog Pope', type: 'dogs', price: '₱550', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403399834_237621199347157_4614463707425405862_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHIa1xVMKpgRLy_7p05vimIutQRd3YU6gm61BF3dhTqCXe96TRNuLgISJZGAjHiNJbUSvTQqkPmX9Q8Ck7GeYFw&_nc_ohc=RcbDep1sWvIAX8BIzMD&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdTMI4Ch3H6BJs93vzmzBDMw49T1XlxW6cJsz2xTl11BRg&oe=659F3EC4' },
+            { name: 'Zee Dog Chucky', type: 'dogs', price: '₱550', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403618817_139689759238652_84867516688326399_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFvUeQbZfbO7AscWkHlYXBZru6fIkngPReu7p8iSeA9F4g9UiNI9iV-gvtYm1uGrkA6wzdUPDCoMwNf1FF2RlXG&_nc_ohc=4cZWlQD2JVoAX8wQqei&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdQpgVQVSvJfr4nYjd3ul78CGZLuvpqEW8xzJAXh13EO8g&oe=659F3F31' },
+            { name: 'Zee Dog Skeleton', type: 'dogs', price: '₱550', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/407217995_208712592287406_7344643725444004749_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHCpukTyp6kfiTerVrHl5UjXZiEjJ5vlIRdmISMnm-UhAv8-9u4f2nKkhw9KS9i_Wa5IkNLF6N7hxlX94ejMpiJ&_nc_ohc=BDGcmaTgMSgAX9QonGd&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdTE05TihbXdhWkl2U2sQ8BonwUnpzeQ0pcGmloyl1B-cQ&oe=659F5001' },
+            { name: 'Zee Dog Dog Chew', type: 'dogs', price: '₱200', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403387742_887181159785677_7078455016262722540_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeG36uova-8Wns5x_7aCWGxt20I2w6eV-NfbQjbDp5X41zp8U4kmNc8IRGwssjAnMEoGA06JWuN4MhUyiF-CByOj&_nc_ohc=2yfBl1aB6ygAX-adRT6&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdTzUVbQCnwyrdW4aVL7a0znSEiOv_WMxDGMWsxNmoO2NA&oe=659F62C3' },
+            { name: 'Zee Dog Plushie', type: 'dogs', price: '₱250', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403604136_6836890016403492_5931854124803503755_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeE2jo-b8Xx4bFeIyspRR765GdlQMMe0ZNgZ2VAwx7Rk2C4OZCgh1kkhVm2s3pWZx1l2Wp1vvA-yhDITWVtlrD9A&_nc_ohc=T9_LGulvyIEAX9T1Itb&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdQunZgb6uZk7ONaMHq25WjEHjFW-J-AWNZtxbj1wbtnTg&oe=659F4AFC' },
+            { name: 'Zee Dog Hide n Slide Toy', type: 'dogs', price: '₱500', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403406834_3096187663846840_5729608196452117844_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHguzhtI96PB4TJzzJxR5UewtqU3i0gCRLC2pTeLSAJEnYuqIgiybrK6r-xumpgOZkbn8lu2AGZ89o-3QGhkgjG&_nc_ohc=ZPcaG3Kbvd0AX8rFDaX&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdSP95m5fdbcqI6X8RuKn5Quh-SD-QqJErGMH_nwkzPJWA&oe=659F5366' },
+            { name: 'Zee Dog Plushie', type: 'dogs', price: '₱200', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403604172_323831927246734_5236242862776832859_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFpU6THt2BO7zvFQT6Ah0rRCyJuX1pafxsLIm5fWlp_G9mpAXlB5TA2jfd4FNapPDjEO0_-AzEJmAJx1GbAt9rY&_nc_ohc=IN7vla4ch00AX9ulGxW&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdR0GNn29rg1kuZM4uVdorTjMeAfJE35XFrYnTNm6TozJw&oe=659F4816' },
+            { name: 'Zee Dog Harness', type: 'dogs', price: '₱450', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403408123_2324564807932918_5804541530230616179_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeEKLFmdyJEsCKf2Na-JS2gF_m6wxUsLQlv-brDFSwtCW-9MLHRAwXAjG24cUcPEHSZHXgMfFw89qzT_B4MniEm2&_nc_ohc=0zOdksB_NvcAX9iJCgw&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdTv7dWBH0mezImx2m0m4UxZl9_XAxh6DBBzOi05x7R00Q&oe=659F3918' },
+            { name: 'Special Dog Rice', type: 'dogs', price: '₱750', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403399837_1649026315908306_2020544476722317556_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHWGG3hvQR9uhPO1NUuxYBAq1k4IqxC3yarWTgirELfJnTNB18iFuBvWTOQmhzRlCkdkYeRBhg8ZmWRmwUFKic7&_nc_ohc=3ZB6I1sdmDQAX90GFSC&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdQqLhZSFSPT2y1UZdZmgDDoFV3DE8r028ldPMWQKG6bnQ&oe=659F659D' },
+            { name: 'Our Dog Shampoo', type: 'dogs', price: '₱250', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403402096_3344770719073671_5389864815796896907_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHc_pVvcGSaAt8ELwM03J83GC5R6ngmEEQYLlHqeCYQRDMogp8ADqHtcF4rW_pTURatOvOedwpkqYPM_W_Pw5MF&_nc_ohc=0z09b9dQ9csAX9h5Nvr&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdReMyCRMW9lrHV03ifzPh3U0SEdHJB3WrHflvvF88fpig&oe=659F3F7A' },
+            { name: 'Our Dog Shampoo', type: 'dogs', price: '₱250', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403395988_1402962100301415_8797578658348410115_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeE3x-Rin2Nzw637cmEUFePO7SB35tvyyVvtIHfm2_LJW_t9-VpkKIOp8lADCoHC49Dsl_aVUM-pv-U77olpo210&_nc_ohc=HBEK97iqj3EAX-VJ3F7&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdSEQMtSw76a43qtP9AHAUD50AMXQIiYD1gHpoTiYDbmYQ&oe=659F5455' },
+            { name: 'Special Dog Ham', type: 'dogs', price: '₱300', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403394863_1070620207302609_8926087892914715194_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHslJMiOkWAdMLbnEv73LW2ep2u-dGSiSF6na750ZKJIV6DwrGCCAZzMSa_qvjS29KhtgvQSb-SGjS1amxvZpPT&_nc_ohc=QW4eN02x87sAX9zT7ZU&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdShqCmItvlblzHHyU-7MmWfteH-1S-sfJkOAqFbP1-k1w&oe=659F624A' },
+            { name: 'Our Dog Shampoo', type: 'dogs', price: '₱250', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403612270_644925587838468_1569110860497486143_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeE3mNbpJ-Ko8hxrvazrweh2LWQLxRxanEstZAvFHFqcSyrZjuTNq0Lm_laMSv-jCgJouiX1iOlEOkC0vAdSz-Lz&_nc_ohc=whI7C2TCU7wAX9kgMK6&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdQoFwRj-Pqd1Wi8kVHYuKnkGCQQAlphIuZ1VYQ-xbeZyg&oe=659F3862' },
+            { name: 'Zee Dog FlyHarness', type: 'dogs', price: '₱600', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403396348_1063956581402530_6824865308510832190_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeEqkahv85CJ2ugYIpzs8XlgFNO4JqF7_y8U07gmoXv_LyIPvCb2lLyLw48tA6vsKMxmZIbZyP9g2t5AVGLdzqxK&_nc_ohc=PIBMEemK6aYAX_W3M49&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdQsfoD-iL1MNxheHRyKdcmxHVowyEesp3YAe7-ARbLyXQ&oe=659F5E74' },
+            { name: 'Zee Dog H-Harness', type: 'dogs', price: '₱700', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403618791_1558926118267583_73156986499192827_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHxQ4VAwT2-SisslD8hFSse4UYWESnamGbhRhYRKdqYZmr0HssZDbixU3vHk-gW72M_BJh5AES26gV5WRU27Uwu&_nc_ohc=9pHt3d83tgsAX94slVW&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdRMI1KvEGgXENRValmV-yLJp3ee4kaW-MOTzttzkyKV0w&oe=659F477E' },
+            { name: 'Zee Dog Collar', type: 'dogs', price: '₱200', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403391015_1403377970528819_6547908084344443741_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHTina31z7t8YyXuFJDHf8dOXg3QCEwWvI5eDdAITBa8uyqUB4LuVeEzs46pFKU6Jg30go75sMr15MUzuxgZKpr&_nc_ohc=kWn5Hpk84lMAX-dWSO5&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdS4FFZQ7Esr0U7M1vqRVu6m3EUCE9qcyDbwG-R-mDgV8g&oe=659F4D2A' },
+            { name: 'Zee Dog Collar', type: 'dogs', price: '₱200', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403618087_327505236901380_7165405330251960918_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHhOO2pFpAdGsNJpnJaBgLbDUrXSuw7pNoNStdK7Duk2qFtpRn0ywt3xGCG2TQx6wQBKoLgWFlIylXlYWtFCGro&_nc_ohc=cYYbFjQrhU4AX8AxynB&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdTBUowYfPKhsuo1e2LxWvnWFTSx4PQpHi4vD-tpjAb9BQ&oe=659F573F' },
+            { name: 'Zee Dog Softer-walk', type: 'dogs', price: '₱500', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403612281_213763105103685_2391975953451917120_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeEJsVLFoi6C41EMz8tLFi-MsiTyF3aXVJyyJPIXdpdUnINz79YWlmoPrO12ytWRpFRdkpA_xkJcXQFX_W7jutY4&_nc_ohc=eznwRHAICo0AX8VqMpw&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdQ4uKKQnCb91J6DWXQ3dBHfulH25OIzToU1YlDIBCImsQ&oe=659F3DC6' },
+            { name: 'Woof-licious Delights', type: 'dogs', price: '₱350', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403439685_600065935561653_2079786469597542726_n.png?_nc_cat=110&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeEfBB0yZJkh9sRzejOLBCi0B2Sro9afxF8HZKuj1p_EXyR9Z2jmKUItOxdxE0HisO6yl_obQwZR0btJv2ZyYUdS&_nc_ohc=cURGmqLOPnAAX9i0lEB&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdTF4sJQm3dYbH2l-nJXD-SciJVEikyuZhNeIZqKNlYn2w&oe=659F5E4A' },
+        ];
+
+        const productsForCats = [
+            { name: 'Meow-nificent Meals', type: 'cats', price: '₱350', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/387419814_364010006122500_3543655414079623246_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeG8jCwGwN4DMQrc2DxSbSjD0kJPkBu9bsfSQk-QG71ux7_fXja-4GMZcnIU3aYFAg4kUkuBKYJNx0ItMXSrgYJC&_nc_ohc=zIimI0wwuX4AX8sI4TL&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdS1jjqkEMbrgjdIGtxvhHlVkimqS_Wp0eIjwYoiNHZ1YQ&oe=659F6B7E' },
+            { name: 'Meow Mix', type: 'cats', price: '₱250', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403403532_1398783150755480_916454977607669092_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeGJGSPYv_SA9IzJwiTrSRVmR6-7pLYJKQBHr7uktgkpAMsGbF4_7lIABXT3sRZ0jrMgPtUihoAv1lF94x08tIpN&_nc_ohc=rK7VvnOXLasAX_LSI_J&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdTvf2mpgnyrfuk3Uctex43OMIj8_FXaBPIKRox2MBGJMA&oe=659F5442' },
+            { name: 'Fancy Feast', type: 'cats', price: '₱180', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/393057796_349905651006792_8394772049771265202_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeGRHKZB0mNaZyf0A3V3XkSqBgRL0q5zWkMGBEvSrnNaQ28kGPHzqbsuV7_Fti8HIRfjapLY1WXQrbtlIVwmfuQU&_nc_ohc=ayy_tLKI_d0AX_-Ta98&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdRO_F8pUvtNevtoC4B_XjVtyzPLdBO5TF-O8CB5N81wYw&oe=659F4DB9' },
+            { name: 'Clumping Cat Litter', type: 'cats', price: '₱350', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403406224_914792303399069_708447439867144210_n.png?_nc_cat=105&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFX4qfcsbCoK8oO-Sn_SbiYxiTUjerQjb_GJNSN6tCNv2N2ZfqcAlNEYbyYZkLzGE7dMqh-yOEkP1Pa_Cltx2mb&_nc_ohc=wzI95LaAyxMAX8II18i&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdRM9gIg9jKyApBlmA9bt8dTX832nLO3ThHljrriqvJjHw&oe=659F39BD' },
+            { name: 'Whiskas', type: 'cats', price: '₱75', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403608477_337486225571356_8757847722255915439_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeF92U2qJlwgB1nd613fBLp6Y3JMC7JeGQVjckwLsl4ZBW8x0P9pF-EEGsuEyeGAKtWg8ZZkrUWhfPZ1e2WXuviw&_nc_ohc=E5NbTzXugqkAX-v6Pl6&_nc_oc=AQkRtfa3TJsqu3uAPhCVCv0eSAVOPGT-smQ_lU7v-2BEiK-Y8eryghUgpkYVH33bNHKHo-5Vx0zJx2wO5r9WgYXy&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdSD3b2m1s_JztjAi7qLoDUTDBAt31sUa_RBM1-0i8Jl5A&oe=659F6AA1' },
+            { name: 'PetO Cera Body Wash', type: 'cats', price: '₱400', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403439685_323780300422978_1673572724656187571_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeEtoi63vjs4LDn2EX3K1q7cjZAAtOQIeXWNkAC05Ah5dc0eGvCLbrlYzZRCL0r2_OhY7NAJ0M20i5MpgCj-ZuP-&_nc_ohc=2SsydNBoGq0AX_Scakj&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdQZTaAIkKtymCNt696WgWiV66gqQAlXIF8AtzrCJ6Si_g&oe=659F442A' },
+            { name: 'Raised Cat Food Bowl Ceramic 15°', type: 'cats', price: '₱250', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403586674_1295134047830174_59062296570484353_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFqtglVT2fx5P53PK8CF9xfC9tWzcWCzk8L21bNxYLOTwaukjXTI-VAPCmZ8JtM7YoND775rKtmLmfw4reA3mNi&_nc_ohc=1bHGGgHiqIIAX9M_tQn&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdRpJbrQ1b5tJkOk11BQTFpiZJkVrOpRdNQB7Tfa0df98g&oe=659F5AC9' }, 
+            { name: 'Uproot Cleaner Pro Pet Hair Remover', type: 'cats', price: '₱300', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403410694_1072514280570915_8046473523751056452_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeGfHvBBGnUxpyjNKVKgLW1f3GmU1JhbXUTcaZTUmFtdRO9_LOeUKlC0Z2jn9yCuEtvM5h8gK_AcQ-OMAFSf2A_W&_nc_ohc=CcSiCWGTkkkAX-3-q_B&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdTc1mn-P9j19zBuGMKH0lPGygmJfGrBkBPlrPF0UYf4sw&oe=659F5296' },
+            { name: 'ALL FOR PAWS Cat Toys Interactive Butterfly Flutter Bug', type: 'cats', price: '₱450', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403406844_296493259448926_8389311724158870489_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHkwXXaKkdTolPPhXJG_Z3jBYycdKOO9w8FjJx0o473D-wiggK2nGqNepyGQOXCFo77-l8zDOmwRPJmm21ajzhA&_nc_ohc=jUJj-Exh20oAX9vdz2A&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdQg33n_10nH2_7gHM2QpjG2b_QbakirAQEbbRaQ2ic6Pg&oe=659F6678' },
+            { name: 'Mr. Pen- Cat Nail Clipper, Kitten Nail Trimmers, Pet Nail Cutter', type: 'cats', price: '₱85', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403394942_853253396481195_8163011038704107041_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHoThAa-RzWDsF_UbpDGEGZB9212uQqSkkH3bXa5CpKSaPeaAKi0usvjj9BMp0tq-vvjW1X4Ba7DUZN0KYZTKCc&_nc_ohc=2Mg4sa77dB4AX9vuH-l&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdQePm0IVe8T4_Nf_tyq0F3EHOINUqa8mf3zt7Wat6x-BQ&oe=659F38D0' },
+            { name: 'Fresh Step Crystals Health Monitoring Cat Litter', type: 'cats', price: '₱350', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403404034_318674707724481_6014875173233803072_n.png?_nc_cat=110&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFFpUhqTVPFj6lI0xhYFFiNzVE-KzCWwHbNUT4rMJbAdovabFFUR5bp0GjE8lUe7cTTXuwg0Ta7QQ8l3t2rylR-&_nc_ohc=MlL3o8O13OEAX_l09Hl&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdRnqDqNfrE52d4Kxk4HqKFPC7QwwaRPVvK3IpWpPOthiA&oe=659F60C8' },
+            { name: 'Jar of Catnip Pawty Mix', type: 'cats', price: '₱250', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403612372_7249786378367753_5006537872747140244_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHOXxERaRMtoZkrgJW4dZzGFHC5qeggAPUUcLmp6CAA9WvgXKZzeHRDfJb-0HWvjpEEtOyhk-0rmvD47R3rBE6f&_nc_ohc=V4aGL_OorB4AX-Jvw4r&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdRf_O-YUm9ErXPOCx14d_L9hUBAQZd1twhH7mlbJdC-Vg&oe=659F43A7' },
+            { name: 'Petsmile Professional Pet Toothpaste', type: 'cats', price: '₱300', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/386889795_885920342856202_6236592016232497702_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHM29tyNAofgC5Wd28Il1r9oThV_1YeNnShOFX_Vh42dLyPSeC1MYK-6qp5XYZ0YeFUoa7o-apDiSgcRDEO1JIY&_nc_ohc=YvIJ_xdla4sAX-pQ2sh&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdT7vpewFBAYRFcrXnufGp-cGY4zLozFzhAgf4jGizZHFw&oe=659F4559' },
+            { name: 'Honey Pot Cat Bed', type: 'cats', price: '₱450', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403407049_325534980284029_5096938821781510422_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeEDlkF1VDNRAucjYEdHrQOq8CUnOoJ5dQbwJSc6gnl1Bis1lyrxYNzPthAMs-w_vo8E-UGFjPrpzRf-_ftfHd6_&_nc_ohc=oMW0vkvdNFwAX_Fgd2o&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdSZKX3_2I-cqgLOVmPM0WrnM2oD_HT5g3WV1hpcpx77ew&oe=659F541D' },
+            { name: 'Landwill Self Cleaning Brush', type: 'cats', price: '₱140', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403402175_1589955671543937_3886708892935230791_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFm05vKeqxemd6QUD3yT0cuVhaUzhYEub9WFpTOFgS5v6najESp74reYihNIXi_dE9ak0ZXjPqWYBv0aDn2TT8J&_nc_ohc=TDyXMMhnLjQAX8SeozH&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdTDRhadoafD4pMydIrof5ttzozvlTdUARG9Wbz_vOq-PA&oe=659F3A28' },
+            { name: 'LASOCUHOO Interactive Cat Rainbow Wand Toys', type: 'cats', price: '₱180', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403402551_224953320551564_7017692108185125252_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHh8VxePy6KrYdygRVGAwO_9i_X11wDhST2L9fXXAOFJKWfo8duyxhLuEmWOtZy-b15VMYqpKSeLuJawX2HlVsI&_nc_ohc=1YXdSVIFauAAX8bKbpB&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdR57HRI6JhArXYzxyPBs46r8JRPzZuvgWIXk5h-EXhrQw&oe=659F58F9' },
+            { name: 'Nature Miracle Advanced Platinum No More Marking', type: 'cats', price: '₱330', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403402114_668303188788932_7808851192585389203_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHlEr5KfnnQp6Qh3rmqjnFlxT_tK3n3If_FP-0refch_zaEkPWoKM95g4OLjn2wUBW6r-IofCSHLUocaa52qe1s&_nc_ohc=z9eRDuGMSZoAX-T5eXt&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdQgL75Onzj9405C4bUWFd33a9vLKrT_H-fswLf32n8IeQ&oe=659F5898' },
+            { name: 'Pets Detergent Spray', type: 'cats', price: '₱250', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403399794_815802277020068_1096135781406638218_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeH5dwW81r7BpHtWetqW00Bq8swZORa_WzbyzBk5Fr9bNurjzUC1Mm1HskNk7-b8bIm9NaD2lriLUjrvR1LaovK3&_nc_ohc=bqMOUmYAiVgAX_yjIrN&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdRga53B91DQkpT0WDSF66SPzum6HOv0xVvWjjssQmOpJg&oe=659F4F8A' },
+            { name: 'Cawypety Cat Backpack Carrier', type: 'cats', price: '₱550', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/409394684_384928180640058_6661072589736146336_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeH_qFII1wnXsOqgkhW1AXH2KEypZa38QogoTKllrfxCiBoF3YuvaKjmZ5Z_MaMkOY5vsHHEUY7we8ZehIJfTL7e&_nc_ohc=Gcp86djwwJEAX87zL-z&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdRSnUwVzbHqZIBkeuidydZAEx2IEatUIMANdGqATvd0dw&oe=659F36FF' },
+            { name: 'AONBOY Cat Water Fountain', type: 'cats', price: '₱600', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403408822_326376333496970_8699543988599893264_n.png?_nc_cat=110&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeE_524LtkDBjlccB6b1bKNFKf_eKT1Qcwkp_94pPVBzCSb0IuZRH1aubn2iM10kb6wsyL_lrgRqHWqY9dwrvqSG&_nc_ohc=RzfpgASEbC0AX_gmgu6&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdRdalcEj9Uk59VLC9C8XtXRfHLCcZBoxueTFV1Cmdbafg&oe=659F69FD' },
+            { name: 'TriOak Cat Collar', type: 'dogs', price: '₱350', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403398453_1308878553147756_8135899763847684143_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHggSm-QMRHceBuA9Js1tkIIN5JXKUIgb0g3klcpQiBvbvxTq6cyE3v6xFgqkXoGKGH3j6zemy4w_K2xruOZMot&_nc_ohc=qSEl7hcyyVwAX_yor8_&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdQ5vEVVpa3BVcYApdmXRc70LCIbebGv3lKYAPhUr6PXkg&oe=659F529E' },
+        ];
+
+        const additionalProducts = [
+            { name: 'Zee bed for all', type: 'all', price: '₱500', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/387505594_282427394323574_3299965380136770752_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFyguUA5iKvLb1AIDvmSIQVCQUDBJ58W64JBQMEnnxbrh6M47WQ1XaleSw4YwxOa3Lcp1ddu_U6l283F5RXGqTu&_nc_ohc=k0__JT5DQUMAX8ySL3Y&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdToSsmdKwOX7NuEHsKxDsNrd90lQ4JjrrgFwWcfQn_xrg&oe=659F52F5' },
+            { name: 'Automatic fur feeder', type: 'all', price: '₱2000', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403397959_326551066996009_7225363580599020457_n.png?_nc_cat=105&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeGankPDrrJbP4hinL5imQebu3IAJXbbZT27cgAldttlPfhGCCwXCww1MQhUvNRYc38yn6G9PMEDtKDj16VLQgCL&_nc_ohc=nv0m8etkiFMAX-uaEA5&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdTWU4inBzC53RLqvzaogjUJy_hXWdFxWNkpIVZB7wzFrg&oe=659F5E33' },
+            { name: 'Pee-pads', type: 'all', price: '₱200', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/403403995_891571855830458_3141630237900956798_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeGjAJXzQRVLIc89Zelj-jhzxuEN8tBbVe_G4Q3y0FtV75iDaFNgzvc9u23AoOK6IuXUtMOeSofzZZCmQ3DUjoPS&_nc_ohc=6C0I0kPBcNwAX-BqyrA&_nc_oc=AQns_PCmVSe_0JpsF1E2Oa-hDVR83Zz-p3pbxRzo5OzYghaEVbeL2X6MZo0zAqfTs66g3b2hRfA6wTmddvh3Iccd&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdRgH-BKdCOwTgc69cAqfBYx5JA30pBdmanv9Utr2guCsg&oe=659F56BC' },
+            { name: 'Fur-sionable pet bag', type: 'all', price: '₱900', image: 'https://scontent.fmnl8-1.fna.fbcdn.net/v/t1.15752-9/386451902_1076297686711494_5675075027946997215_n.png?_nc_cat=110&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeGf4C6twHjQIcsbUCzpDE-ZzP-Qtzsp27HM_5C3OynbsR8Fm0aVXb2dGChdmkeHbKTn7VWQY62eY6IU0DdzQXOr&_nc_ohc=pinTnQD9hQYAX8B0dwW&_nc_ht=scontent.fmnl8-1.fna&oh=03_AdQN5Fod6OIC7ol6AgBwfQHAf964U1FVT6bcPvFolkUJXQ&oe=659F65A3' },
+            { name: 'Nail clippers', type: 'all', price: '₱150', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403603380_378534158074930_3885236414714090111_n.png?_nc_cat=105&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHa1poMwsY4zY2xXr4rumQms3dInfBK3lSzd0id8EreVBVTvT6x86EzOEYGHEVDacn-7tmSP6pl4DNrBn4GCupJ&_nc_ohc=ir3YlHjFReMAX9Yr4zT&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdRZbrvhSazdVNjKmWeVksdLDnnWjaD2ffeeGmwngar7aw&oe=659F6AC4' },
+            { name: 'Pet Stroller', type: 'all', price: '₱1500', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403625916_1047096446537966_3931684073484131720_n.png?_nc_cat=105&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeGbHjuXRq4MsLz9ffUiTFmMHVh5KRSFfuYdWHkpFIV-5huHMDYwFhAhNkBBW0KurRLtZ9Cn7ivs8ShMq8J2kSkd&_nc_ohc=huA_AS5h7nIAX_OTnEI&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdQ2SGLe2i-tXQh45TP-l6NHXQ04k84t58TC4yDzXZSX_A&oe=659F55BE' },
+            { name: 'Pet-ez comb', type: 'all', price: '₱150', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403611487_198617636571658_6442584575316270073_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFp-sHkMfSOx8RYi3VsikweMFoKmtDkAh4wWgqa0OQCHr1KHg0Ie4A3pXKADe9PU-EUZb4cv7To1oAczjMYYqXg&_nc_ohc=CKKEkWg0v2kAX8jaCv0&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdSyr3Ftoq4QhWDK72gIu-TnPOU7hbaffYZt95QQPAeEXA&oe=659F6B98' },
+            { name: 'Collapsible bowls', type: 'all', price: '₱250', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403606943_323398143836974_102632843061181039_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeH-EHkvfxq3-gQKCOib9hQ5dlfcARuOkqd2V9wBG46Spz3vE41i6HM_dei4nDz3idsZOJf_dxhXZfiEgoi1IJU8&_nc_ohc=UPs3iiPfvp0AX-duzOp&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdSlNOGC6elqcWq-R4KoeA1QjxEH_OJ1K7xXd5WXVmZFBQ&oe=659F6453' },
+            { name: 'Licking mat', type: 'all', price: '₱300', image: 'https://scontent.fmnl8-2.fna.fbcdn.net/v/t1.15752-9/403405925_291454373852191_7815419371040646029_n.png?_nc_cat=109&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFUP41MiToQgC3osPybM6qu7Aw2cWBz7XzsDDZxYHPtfBaR9acfvai_5RLaR7JLbByBJ55lEHgidzbCSz69FH2E&_nc_ohc=QickrFtj2JIAX-xaQu4&_nc_ht=scontent.fmnl8-2.fna&oh=03_AdQUUijMqMfs-Y1w4bHsgQaDbxgL6K-Gb6VGP_iyKw9AUg&oe=659F6A95' },
+            { name: 'Pet Poop Bags', type: 'all', price: '₱250', image: 'https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403403972_1417637295629205_3876262422009205033_n.png?_nc_cat=101&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeG8-j1sieRGG_PesPIbRSZXrAZ0LaRZV4qsBnQtpFlXinXaCtQ3sLqkbmEUvtQYYrDXnuoMeBuAu4PmPUaD85eo&_nc_ohc=v1yLuQ-elvQAX9zuH0O&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdSjnvsLRmAUYg6QlG_roK4GyAA2VAtnC1gZspkPRVq7_g&oe=659F50B5' },
+        ];
+
+        const products = [
+            ...productsForDogs,
+            ...productsForCats,
+            ...additionalProducts,
+        ];
+
+	const selectedProducts = [];
+
+        // Automatically show all products when the page loads
+        window.onload = function() {
+            showAllProducts();
+        };
+
+    function showAllProducts() {
+        // Sort products alphabetically by name
+        const sortedProducts = products.slice().sort((a, b) => a.name.localeCompare(b.name));
+        displayProducts(sortedProducts);
+    }
+
+    function showProducts(category) {
+        const filteredProducts = category === 'dogs' ? productsForDogs :
+            category === 'cats' ? productsForCats :
+                products.filter(product => product.type === category);
+        displayProducts(filteredProducts);
+    }
+
+    function displayProducts(productList) {
+    const productContainer = document.getElementById('product-container');
+    productContainer.innerHTML = '';
+
+    productList.forEach(product => {
+        const productElement = document.createElement('div');
+        productElement.className = 'product';
+        productElement.setAttribute('data-category', product.type);
+        productElement.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <p>${product.name}</p>
+            <p>${product.price}</p>
+            <span class="add-to-cart" onclick="addToCart('${product.name}', '${product.price}')">&#43;</span>
+        `;
+        productContainer.appendChild(productElement);
+    });
+}
+
+    function addToCart(productName, productPrice) {
+        const cartItems = document.getElementById('cart-items');
+        const cartItem = document.createElement('li');
+        cartItem.innerHTML = `${productName} - ${productPrice} <button onclick="deleteCartItem(this)">Delete</button>`;
+        cartItems.appendChild(cartItem);
+
+        // Add the selected product to the array
+        selectedProducts.push({ name: productName, price: productPrice });
+    }
+
+    function deleteCartItem(button) {
+        const cartItem = button.parentNode;
+        const cartItems = document.getElementById('cart-items');
+
+        // Remove the selected product from the array
+        const productName = cartItem.textContent.split('-')[0].trim();
+        const index = selectedProducts.findIndex(product => product.name === productName);
+        if (index !== -1) {
+            selectedProducts.splice(index, 1);
+        }
+
+        cartItems.removeChild(cartItem);
+    }
+
+    function toggleShoppingCart() {
+        const shoppingCart = document.getElementById('shopping-cart');
+        shoppingCart.style.display = shoppingCart.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function submitCart() {
+        // Handle the submission logic here
+
+        // Redirect to the "ship-out.html" page
+        window.location.href = 'ship-out.html';
+
+        // You can further process or send the selectedProducts data as needed
+        // For now, let's reset the selectedProducts array and hide the shopping cart
+        selectedProducts.length = 0;
+        const shoppingCart = document.getElementById('shopping-cart');
+        shoppingCart.style.display = 'none';
+        // Clear the cart items
+        document.getElementById('cart-items').innerHTML = '';
+    }
+
+    function filterProducts() {
+    var selectedCategory = document.getElementById("product-filter").value;
+    var searchQuery = document.getElementById('search-input').value.toLowerCase();
+
+    var productContainers = document.getElementsByClassName("product-container");
+
+    for (var i = 0; i < productContainers.length; i++) {
+        var productContainer = productContainers[i];
+        var productsInContainer = productContainer.getElementsByClassName("product");
+
+        for (var j = 0; j < productsInContainer.length; j++) {
+            var product = productsInContainer[j];
+            var category = product.getAttribute("data-category");
+            var productName = product.textContent.toLowerCase();
+
+            var categoryMatch = selectedCategory === "all" || selectedCategory === category;
+            var searchMatch = productName.includes(searchQuery);
+
+            if (categoryMatch && searchMatch) {
+                product.style.display = "block";
+            } else {
+                product.style.display = "none";
+            }
+        }
+    }
+}
+
+function searchProducts() {
+    const searchQuery = document.getElementById('search-input').value.toLowerCase();
+    const allProducts = [...productsForDogs, ...productsForCats];
+
+    // Filter products based on the search query
+    const filteredProducts = allProducts.filter(product => {
+        const productName = product.name.toLowerCase();
+        return productName.includes(searchQuery);
+    });
+
+    // Display the filtered products
+    displayProducts(filteredProducts);
+}
+
+</script>
+</body>
+</html>
