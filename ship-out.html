@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Form</title>
+ <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    form {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2, h3 {
+        color: #333;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #shippingInfo {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color: #e0f7fa;
+        border-radius: 4px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        text-align: left;
+    }
+
+    #shippingInfo h2,
+    #shippingInfo p {
+        margin-bottom: 10px;
+    }
+
+    #shippingInfo ol {
+        margin-left: 20px;
+    }
+</style>
+</head>
+<body>
+
+    <form onsubmit="submitForm(event)">
+        <h2>Checkout Form</h2>
+        
+        <!-- Personal Information -->
+        <h3>Personal Information</h3>
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" required>
+        
+        <label for="billingAddress">Billing Address:</label>
+        <textarea id="billingAddress" name="billingAddress" required></textarea>
+        
+        <label for="shippingAddress">Shipping Address:</label>
+        <textarea id="shippingAddress" name="shippingAddress" required></textarea>
+        
+        <!-- Contact Information -->
+        <h3>Contact Information</h3>
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" required>
+        
+        <!-- Payment Information -->
+        <h3>Payment Information</h3>
+        <label for="cardDetails">Credit/Debit Card Details:</label>
+        <input type="text" id="cardDetails" name="cardDetails" required>
+        
+        <label for="altPaymentMethods">Alternative Payment Methods:</label>
+        <textarea id="altPaymentMethods" name="altPaymentMethods"></textarea>
+        
+        <!-- Account Information -->
+        <h3>Account Information</h3>
+        <label for="userAccount">User Account:</label>
+        <input type="text" id="userAccount" name="userAccount">
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        
+        <!-- Product Information -->
+        <h3>Product Information</h3>
+        <!-- Include fields for product selection, quantity, size, color, etc. -->
+        
+        <!-- Shipping Preferences -->
+        <h3>Shipping Preferences</h3>
+        <label>Shipping Method:</label>
+        <input type="radio" id="standard" name="shippingMethod" value="standard" required>
+        <label for="standard">Standard</label>
+
+        <input type="radio" id="express" name="shippingMethod" value="express" required>
+        <label for="express">Express</label>
+        <br><br>
+
+        <label for="deliveryInstructions">Delivery Instructions:</label>
+        <textarea id="deliveryInstructions" name="deliveryInstructions"></textarea>
+        
+        <label for="deliveryInstructions">Delivery Instructions:</label>
+        <textarea id="deliveryInstructions" name="deliveryInstructions"></textarea>
+        
+        <!-- Promo Codes or Coupons -->
+        <h3>Promo Codes or Coupons</h3>
+        <label for="promoCode">Promo Code:</label>
+        <input type="text" id="promoCode" name="promoCode">
+        
+        <!-- Terms and Conditions Acknowledgment -->
+        <h3>Terms and Conditions Acknowledgment</h3>
+        <label>
+            <input type="checkbox" id="termsAndConditions" name="termsAndConditions" required>
+            I agree to the terms and conditions
+        </label>
+        
+        <!-- Consent for Marketing Communication -->
+        <h3>Consent for Marketing Communication</h3>
+        <label>
+            <input type="checkbox" id="marketingConsent" name="marketingConsent">
+            I would like to receive marketing emails or newsletters
+        </label>
+        
+        <!-- Submit Button -->
+        <button type="submit">Submit</button>
+        <div id="shippingInfo">
+            <h2>Submitted Information</h2>
+            <p id="fullNameDisplay"></p>
+            <p id="billingAddressDisplay"></p>
+            <p id="shippingAddressDisplay"></p>
+            <p id="emailDisplay"></p>
+            <p id="phoneNumberDisplay"></p>
+            <p id="cardDetailsDisplay"></p>
+            <p id="altPaymentMethodsDisplay"></p>
+            <p id="userAccountDisplay"></p>
+            <p id="passwordDisplay"></p>
+            <p id="shippingMethodDisplay"></p>
+            <p id="deliveryInstructionsDisplay"></p>
+            <p id="promoCodeDisplay"></p>
+            <p id="termsAndConditionsDisplay"></p>
+            <p id="marketingConsentDisplay"></p>
+            <p>
+                To complete your shipping, please take a screenshot of this information and send it to pawday.pet@gmail.com.
+                Follow these steps:
+            </p>
+            <ol>
+                <li>Press <strong>Print Screen</strong> or <strong>PrtScn</strong> on your keyboard to capture the entire screen.</li>
+                <li>Open an image editing tool (like Paint or any other image editor).</li>
+                <li>Paste the screenshot (<strong>Ctrl+V</strong>) and save the image.</li>
+                <li>Attach the saved image to an email and send it to <strong>pawday.pet@gmail.com</strong>.</li>
+            </ol>
+        </div>
+    </form>
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+
+            // Retrieve all inputted information (same as before)
+            var fullName = document.getElementById('fullName').value;
+            var billingAddress = document.getElementById('billingAddress').value;
+            var shippingAddress = document.getElementById('shippingAddress').value;
+            var email = document.getElementById('email').value;
+            var phoneNumber = document.getElementById('phoneNumber').value;
+            var cardDetails = document.getElementById('cardDetails').value;
+            var altPaymentMethods = document.getElementById('altPaymentMethods').value;
+            var userAccount = document.getElementById('userAccount').value;
+            var password = document.getElementById('password').value;
+            var selectedShippingMethod = document.querySelector('input[name="shippingMethod"]:checked');
+            var deliveryInstructions = document.getElementById('deliveryInstructions').value;
+            var promoCode = document.getElementById('promoCode').value;
+            var termsAndConditions = document.getElementById('termsAndConditions').checked ? 'Agreed' : 'Not Agreed';
+            var marketingConsent = document.getElementById('marketingConsent').checked ? 'Subscribed' : 'Not Subscribed';
+
+            // Display the submitted information in a pop-up
+            var shippingInfoPopup = document.getElementById('shippingInfo');
+            shippingInfoPopup.style.display = 'block';
+            document.getElementById('fullNameDisplay').innerText = 'Full Name: ' + fullName;
+            document.getElementById('billingAddressDisplay').innerText = 'Billing Address: ' + billingAddress;
+            document.getElementById('shippingAddressDisplay').innerText = 'Shipping Address: ' + shippingAddress;
+            document.getElementById('emailDisplay').innerText = 'Email Address: ' + email;
+            document.getElementById('phoneNumberDisplay').innerText = 'Phone Number: ' + phoneNumber;
+            document.getElementById('cardDetailsDisplay').innerText = 'Card Details: ' + cardDetails;
+            document.getElementById('altPaymentMethodsDisplay').innerText = 'Alternative Payment Methods: ' + altPaymentMethods;
+            document.getElementById('userAccountDisplay').innerText = 'User Account: ' + userAccount;
+            document.getElementById('passwordDisplay').innerText = 'Password: ' + password;
+            document.getElementById('shippingMethodDisplay').innerText = 'Shipping Method: ' + (selectedShippingMethod ? selectedShippingMethod.value : '');
+            document.getElementById('deliveryInstructionsDisplay').innerText = 'Delivery Instructions: ' + deliveryInstructions;
+            document.getElementById('promoCodeDisplay').innerText = 'Promo Code: ' + promoCode;
+            document.getElementById('termsAndConditionsDisplay').innerText = 'Terms and Conditions: ' + termsAndConditions;
+            document.getElementById('marketingConsentDisplay').innerText = 'Marketing Consent: ' + marketingConsent;
+        }
+    </script>
+</body>
+</html>
