@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Shop</title>
+    <style>
+        body {
+cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385542012_742720367705438_8505801103636760152_n.png?stp=cp0_dst-png&_nc_cat=109&ccb=1-7&_nc_sid=510075&_nc_eui2=AeEDOaoODKPpQ8CGodwzN_lO6YB107fDM7TpgHXTt8MztIf4h0U_gPgpbBLNycOcbhDOoZga8OWgBrgfev25rb6F&_nc_ohc=zYuMCWaPV48AX9y5BDa&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdROmeWw4Qdj-_xXsZP569YTGq7gPr-YaxHQRVrtidhktw&oe=659C5275'), auto;
+
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url("https://scontent.fcrk1-5.fna.fbcdn.net/v/t1.15752-9/377289899_3193085357654552_1099498096331980031_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeE2i6MFK8dFsLOssPVvB15AvnqzbKq-xGu-erNsqr7Ea8fgl3-O9CXvI-fCBet8S2FFkwQD4t-55PP0b1I4NL8r&_nc_ohc=9Q8_9zWcaeoAX-FSOO9&_nc_ht=scontent.fcrk1-5.fna&oh=03_AdTIUJ_AlGJi5NLdoUA-RKY6wbUISBt8DjXundUM944FkA&oe=659BA3A6") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+            transition: backdrop-filter 0.3s ease;
+        }
+	html, body {
+            overflow-x: hidden;
+        }
+
+
+        h1 {
+            font-size: 33px;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+.container .row {
+            flex-direction: row; /* Set row direction for .row */
+            align-items: flex-start; /* Align items at the start of the row */
+        }
+
+        .Map {
+            text-align: center;
+	        margin-right:250px;
+            transform: translate(-10%, 7%);
+            max-width: 300px; /* Adjust the max-width to your preference */
+            height: 112px; /* Adjust the height to your preference */
+        }
+        .Store{
+            text-align: center;
+            max-width: 200%;
+            height: 20vh;
+	        margin-left:250px;
+            transform: translate(-140%, 10%);
+
+        }
+        .Store img {
+            position: fixed;
+            max-width: 170%;
+            border-radius: 10px;
+            height: auto;
+        }
+
+        .Map img {
+            position: fixed;
+            max-width: 400%;
+            border-radius: 10px;
+            height: 300%;
+margin-top:10%;
+        }
+
+        .location-text {
+            margin-left: 0; /* Adjust margin-left to your preference */
+            margin-top: 5px; /* Adjust margin-top to your preference */
+
+        }
+
+        .Description {
+            margin-top: 20px; /* Adjust margin-top to your preference */
+            margin-left: 0; /* Adjust margin-left to your preference */
+        }
+        h2 {
+            color: #333;
+font-family: "Trebuchet MS", Tahoma, sans-serif;
+        }
+
+        p {
+            line-height: 1.6;
+            color: black;
+font-family: "Trebuchet MS", Tahoma, sans-serif;
+        }
+
+        .mission {
+            background-color: #f0dda3;
+        }
+
+        .vision {
+            background-color: #f0dda3;
+        }
+
+        .history {
+            background-color: #f0dda3;
+        }
+.pawday {
+background-color: #deb35f;
+}
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .person {
+            text-align: center;
+            margin: 0 30px;
+            position: relative;
+            overflow: hidden;
+            cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;
+        }
+
+        .person img {
+            max-width: 100%;
+            border-radius: 20px;
+            transition: filter 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .hover-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            padding: 5px;
+            color: white;
+            border-radius: 10px;
+            text-shadow: 0 0 10px #ff8c00, 0 0 20px #ff8c00, 0 0 30px #ff8c00;
+            transition: opacity 0.3s ease-in-out;
+            font-size: 40px;
+            font-family: 'Trebuchet MS', sans-serif;
+        }
+
+        .person:hover img {
+            filter: blur(14px); /* Adjust brightness on hover */
+            transform: scale(1.1); /* Zoom effect on hover */
+        }
+
+        .person:hover .hover-text {
+            opacity: 1;
+        }
+
+h1 {text-align: center; 
+color: white; 
+margin-top:50px;
+text-shadow: 0 0 10px #ff8c00, 0 0 20px #ff8c00, 0 0 30px #ff8c00;
+font-size: 60px;
+}
+
+h3 {text-align: center; 
+color: white; 
+margin-top:20px;
+text-shadow: 0 0 10px #ff8c00, 0 0 20px #ff8c00, 0 0 30px #ff8c00;
+font-size: 40px;
+font-family: "Trebuchet MS", Tahoma, sans-serif;
+}
+
+h4 {
+text-align: center; 
+color:white;
+text-shadow: 0 0 10px black, 0 0 20px black, 0 0 30px black;
+font-family: "Trebuchet MS", Tahoma, sans-serif;
+}
+
+.ps-address { 
+text-align: center; 
+color:white;
+text-shadow: 0 0 10px black, 0 0 20px black, 0 0 30px black;
+font-family: "Trebuchet MS", Tahoma, sans-serif;
+transform: translate(85%, -300%);
+}
+
+.ml {
+    text-align: center; 
+color:white;
+text-shadow: 0 0 10px black, 0 0 20px black, 0 0 30px black;
+font-family: "Trebuchet MS", Tahoma, sans-serif;
+transform: translate(200%, -260%);
+}
+
+    </style>
+</head>
+<body>
+    <section class="pawday">
+        <h2><center>What's PawDay?</h2>
+        <p>PawDay is a vibrant pet shop dedicated to celebrating our furry friends. It's a special day where pets with paws take center stage, offering a unique and tailored experience for cats and dogs. From premium pet supplies to personalized grooming and daycare services, Paw-Day ensures a paw-sitively delightful experience for your beloved companions.</p>
+    </section>
+<div>
+    <section class="mission">
+        <h2>Mission</h2>
+        <p>We are dedicated to providing quality pet products, services, and educational resources, promoting a joyful and healthy life for our furry companions. To enhance the well-being of pets and strengthen the bond between animals and their owners.</p>
+    </section>
+
+    <section class="vision">
+        <h2>Vision</h2>
+        <p>We aspire to foster a community where every pet receives love, care, and proper attention. Through innovation and empathy, we aim to become a leading platform that celebrates the joy and companionship pets bring into our lives and be a trusted and compassionate hub for pet enthusiasts.</p>
+    </section>
+
+    <section class="history">
+        <h2>History</h2>
+        <p>Founded by a group of passionate 1st-year students who share a deep love for pets, Paw-Day began as a humble initiative in 2023. What started as a simple idea to create a space for pet lovers to connect has evolved into a thriving platform offering a range of pet products and services. Driven by our founders' enthusiasm and commitment, Paw-Day quickly gained popularity among pet owners and enthusiasts alike. Our journey is marked by continuous dedication to the well-being of pets, from those initial days as students to becoming a go-to destination for all things related to pet care. Today, Paw-Day stands as a testament to the belief that the love for pets can create a positive impact on the lives of both animals and their human companions. As we look to the future, our commitment remains unwavering — to be a beacon of care, knowledge, and joy in the world of pets.</p>
+    </section>
+</div>
+
+                <h1>FOUNDERS</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="person Floreine">
+            <img src="https://scontent.fcrk1-2.fna.fbcdn.net/v/t1.15752-9/386889646_325238213790787_432301789175149431_n.png?_nc_cat=110&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeG6xliH52o7V3l9A7RgJHRyhTJeN41BOzqFMl43jUE7OsO9CrO4L4ycpqBkRGxn7QA6il5pZs3StKEWtDOHDiN5&_nc_ohc=Jodr50y31XYAX8ZIPU6&_nc_ht=scontent.fcrk1-2.fna&oh=03_AdTmlvi_3iYH5v4ylrOJDgqEcrw6QOE1OWVHFN3PXpaSmw&oe=659B7B24" alt="Wen Image">
+            <div class="hover-text">Floreine Santos</div>
+        </div>
+
+        <div class="person Addam">
+            <img src="https://scontent.fcrk1-5.fna.fbcdn.net/v/t1.15752-9/393086060_903778764710826_4309004985580114772_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHG55m_d1MtBadS9aS7Dw9U4EzrfvPw2RHgTOt-8_DZESEnti7351mUQq2XQcx6dXvR7JWefpGKjIrMvFGvKj1E&_nc_ohc=q2xpnXB0ugYAX8ICwqw&_nc_ht=scontent.fcrk1-5.fna&oh=03_AdQ3Dn3uVkQ0ZCqZ6RocpDweGoLnA92QjgM0dA2K9z_4SQ&oe=659B9777" alt="Addam Image">
+            <div class="hover-text">Addam Geronga</div>
+        </div>
+
+        <div class="person Jiro">
+            <img src="https://scontent.fcrk1-4.fna.fbcdn.net/v/t1.15752-9/404996550_3691921521089510_5927667648808248370_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeES1S5rb053C3YAOkAZjfojVrBtrXoDabFWsG2tegNpsVG8dz-kOo0Cr9PhIV2G8JVQ-O-A8ZMRYbpeM_7xm4XR&_nc_ohc=jAJndMpKn40AX8jdf7L&_nc_ht=scontent.fcrk1-4.fna&oh=03_AdStQ1hygeJ921BU1-Z9UAP7pLX9yGAYohyeGx0fnjU85Q&oe=659B8475" alt="Jiro Image">
+            <div class="hover-text">Jiro Yap</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="person Dale">
+            <img src="https://scontent.fcrk1-5.fna.fbcdn.net/v/t1.15752-9/393168475_344938554902489_688253511713824858_n.png?_nc_cat=104&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeEI3Dr78Eo6llf2wP1cw4FVl18URysSPlOXXxRHKxI-U9Jpz9MWm_-U9epkxyiIWC2wyZtGaxANGceX_mdUkZ8P&_nc_ohc=BV6zbVTeIZcAX_nZ8at&_nc_ht=scontent.fcrk1-5.fna&oh=03_AdR2WQO8IHN1JVA5QeOHRx89y5Ku5EumEZ40QVKKUjpNXQ&oe=659B8F90" alt="Dale Image">
+            <div class="hover-text">Dale Samson</div>
+        </div>
+
+        <div class="person Che">
+            <img src="https://scontent.fcrk1-4.fna.fbcdn.net/v/t1.15752-9/398400717_646142217734657_7690593449073689302_n.png?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHZwVoyXtboUyMTBlTegzxFWRGKgrtqY0xZEYqCu2pjTGoeg3gov3ynilYU1atct7dFSARb9RSNck42JdWlfUGN&_nc_ohc=Yp20nvS_MZcAX9TuxJb&_nc_ht=scontent.fcrk1-4.fna&oh=03_AdS2dJumQA7UdAhXnKahyZslXXii6KoKUrIGVYDMDCvvfw&oe=659BB22F" alt="Che Image">
+            <div class="hover-text">Chellssie Gervacio</div>
+        </div>
+
+        <div class="person Clark">
+            <img src="https://scontent.fcrk1-2.fna.fbcdn.net/v/t1.15752-9/385537924_3684280175232388_6905662942377043368_n.png?_nc_cat=110&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHhJXL_b1a7kyjXd_za_YaMdPHCnjwZFBx08cKePBkUHCjHbLYaruc1xgo2aJzqFq0TVyL6BadGZmR9etXDo-ck&_nc_ohc=yrvTSwLvEWgAX_dH541&_nc_ht=scontent.fcrk1-2.fna&oh=03_AdQ-Nf1z_BX0qu3aQKaGFBsz0t9eGub-1TqmV8OR77YkNA&oe=659BADD0" alt="Clark Image">
+            <div class="hover-text">Clark Maglalang</div>
+        </div>
+    </div>
+</div>
+<h1>LOCATION</h1>
+<div class="container">
+    <div class="row">
+        <div class="Store">
+            <img src="https://scontent.fmnl4-1.fna.fbcdn.net/v/t1.15752-9/368194526_1486081065523360_874548481430985207_n.png?_nc_cat=103&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeG3HxsVIdxRgEkS6q7rlPuho0pz9dwz3RujSnP13DPdG2DOI62DRtsPqhbloqJ7Gcgn04pf4yzCX3XLQTJYFT_B&_nc_ohc=tdwhIT0kwYIAX9yz_ru&_nc_ht=scontent.fmnl4-1.fna&oh=03_AdQx-KyPy9FuNueddiaA1jakZ9vbl5_dMRwjvmbPPVNLMQ&oe=659F802F" alt="Store Image">
+            <h4 class="ps-address">Physical Store : #63 Villanueva St. Imus, Cavite</h4>
+        </div>
+
+        <div class="Map">
+            <img src="https://scontent.fmnl4-6.fna.fbcdn.net/v/t1.15752-9/385527843_723226902727621_5571690953638750785_n.png?_nc_cat=108&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeERKoxs3p6lY05Z51JvIom9eK1t0JEBJ4t4rW3QkQEni1T5hyORf4zKbjSBSQ3lp5wNKFd2CLsLGbnKnUdjLi9B&_nc_ohc=txUytqY62sAAX8JQQKq&_nc_ht=scontent.fmnl4-6.fna&oh=03_AdRU5xvhBX3Q82ZMiqsFgvfi1W8LOQy4mic-8JUOx9WiRA&oe=659F51C9" alt="Map Image">
+            <h4 class="ml">Map Location</h4>
+        </div>
+    </div>
+</div>
+
+
+
+
+</body>
+</html>
