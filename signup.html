@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Paw Day</title>
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,6 +15,7 @@
             text-align: center;
             background: url("https://scontent.xx.fbcdn.net/v/t1.15752-9/393196472_665373952469234_2559713688420572276_n.png?stp=dst-png_p403x403&_nc_cat=110&ccb=1-7&_nc_sid=510075&_nc_eui2=AeGCqtIFWhqJCVwm3M5td51hN5q_08ylJX03mr_TzKUlfbtEC5piU0g-fXK8dXdOfqZ3uxKJ_U_mGbn5xADhXh4Z&_nc_ohc=iMjZkhKNA2UAX80KdLv&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdRR6cwUOB0IsrrdiiknfkgW8dKOiPOerJLGv3Km5fyRpg&oe=65974050")no-repeat center center fixed;
             background-size: cover;
+cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385542012_742720367705438_8505801103636760152_n.png?stp=cp0_dst-png&_nc_cat=109&ccb=1-7&_nc_sid=510075&_nc_eui2=AeEDOaoODKPpQ8CGodwzN_lO6YB107fDM7TpgHXTt8MztIf4h0U_gPgpbBLNycOcbhDOoZga8OWgBrgfev25rb6F&_nc_ohc=zYuMCWaPV48AX9y5BDa&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdROmeWw4Qdj-_xXsZP569YTGq7gPr-YaxHQRVrtidhktw&oe=659C5275'), auto;
         }
 
         form {
@@ -36,6 +39,9 @@
             top: 0;
             left: 0;
         }
+input {
+  cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;
+}
         
         .background-divv {
             width: 100%;
@@ -58,7 +64,7 @@
             color: black;
         }
 
-        #email,
+        #n,
         #password {
             width: 100%;
             padding: 15px;
@@ -73,15 +79,13 @@
         .signin-link {
             color: #F7D72F; 
             text-decoration: underline; 
+cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;
         }
 
         .signin-link:hover {
             color: #FAC05A;
         }
 
-        .signin-link:visited {
-            color: violet;
-        }
 
         .fa-eye {
             position: absolute;
@@ -106,35 +110,85 @@
             background-color: #FAC05A;
         }
 
+        .password-container {
+            position: relative;
+        }
+
+        .fa-eye {
+            position: absolute;
+            cursor: pointer;
+            color: black;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
     </style>
 </head>
+
 <body>
 
     <!-- Sign-up Form -->
-    <form id="signup-form">
+    <form id="signup-form" onsubmit="validatePasswords(event)">
         <div class="background-div"></div>
         <div class="background-divv"></div>
 
         <br><br>
-        <input type="text" id="email" name="firstName" placeholder="First Name" required>
-        <input type="text" id="email" name="lastName" placeholder="Last Name" required>
-        <input type="text" id="email" name="email" placeholder="Email Address" required>
+        <input type="text" id="n" name="firstName" placeholder="First Name" required>
+        <input type="text" id="n" name="lastName" placeholder="Last Name" required>
+        <input type="email" id="n" name="email" placeholder="Email Address" required>
 
         <div class="password-container">
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <i class="fa-solid fa-eye" id="show-pass"></i>
-            <input type="password" id="password" name="confirmPassword" placeholder="Confirm Password" required>
-            <i class="fa-solid fa-eye" id="show-pass"></i>
+            <input type="password" id="n" name="password" placeholder="Password" required>
+            <i class="fa-solid fa-eye" onclick="togglePassword('password')"></i>
+            <input type="password" id="n" name="confirmPassword" placeholder="Confirm Password" required>
+            <i class="fa-solid fa-eye" onclick="togglePassword('confirmPassword')"></i>
         </div>
 
         <br><br>
 
-        <a href="index.html" target="_self" class=" home"><b>SIGN UP</b></a>   
-        <br><br>     
+        <button type="submit" style =  "width: 50%;
+            background-color: #FEEAA5;
+            color: black;
+            padding: 12px 20px;
+            border: none;
+cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;
+            border-radius: 20px;
+           
+            font-size: 15px;
+            text-decoration: none;"><b>SIGN IN</b></a> </button>
+        <br><br>
 
         <p>Already a Customer? <a href="signin.html" class="signin-link">Sign In</a></p>
         <br><br>
     </form>
 
+    <script>
+        function togglePassword(inputId) {
+            var passwordInput = document.getElementById(inputId);
+            var eyeIcon = document.querySelector(`#${inputId} + .fa-eye`);
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        }
+
+        function validatePasswords(event) {
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match. Please confirm your password.');
+                event.preventDefault(); // Prevent form submission
+            }
+        }
+    </script>
+
 </body>
+
 </html>
