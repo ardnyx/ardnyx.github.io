@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Package</title>
+    
+    <style>
+        body {
+cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385542012_742720367705438_8505801103636760152_n.png?stp=cp0_dst-png&_nc_cat=109&ccb=1-7&_nc_sid=510075&_nc_eui2=AeEDOaoODKPpQ8CGodwzN_lO6YB107fDM7TpgHXTt8MztIf4h0U_gPgpbBLNycOcbhDOoZga8OWgBrgfev25rb6F&_nc_ohc=zYuMCWaPV48AX9y5BDa&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdROmeWw4Qdj-_xXsZP569YTGq7gPr-YaxHQRVrtidhktw&oe=659C5275'), auto;
+            font-family: "Trebuchet MS", Tahoma, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: beige;
+            color: #333; /* Text color for better readability */
+        }
+
+        nav {
+            display: flex;
+        }
+
+        nav a {
+            padding: 10px;
+            color: #DCA12E;
+            text-decoration: none;
+        }
+
+        .back-button {
+            display: block;
+            margin-top: 15px;
+            margin-right: auto; 
+            padding: 10px 15px;
+            background-color: #DCA12E;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;
+            text-align: center;
+            height: 30px; /* Increased height for better visibility and touch-friendly */
+        }
+
+        .back-button:hover {
+            background-color: #b30000;
+        }
+
+        section {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            flex-wrap: wrap; /* Allow items to wrap to the next line on smaller screens */
+        }
+
+        section > div {
+            position: relative;
+            width: 30%;
+            margin: 0 1.5%;
+            padding: 20px;
+            border-radius: 50px;
+            box-sizing: border-box;
+            background-color: #f0f0f0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for a subtle effect */
+            transition: box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        section > div:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff; /* Change the background color to your desired color */
+        }
+
+        section > div img {
+            width: 100%; /* Adjust width to 100% */
+            height: auto; /* Maintain aspect ratio */
+            display: block;
+            margin: 10px auto;
+            border-radius: 50px;
+            transition: filter 0.3s ease; /* Add transition for the filter property */
+        }
+
+        section > div:hover img {
+            filter: blur(5px); /* Apply blur on hover */
+        }
+
+        h2{
+            color: #DCA12E;
+            text-align: center;
+            margin: 0;
+            font-size: 24px;
+        }
+	h3 {
+            color: #DCA12E;
+            text-align: center;
+            margin: 0;
+}
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .book-button {
+            position: absolute; /* Position the button relative to the parent div */
+top:22%;
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Center the button precisely */
+            display: none; /* Initially hide the button */
+            margin-bottom: 800px;
+            padding: 10px 15px;
+            background-color: #DCA12E;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;
+            text-align: center;
+            width: 50%;
+            height: 0 auto;
+cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;
+            transition: background-color 0.3s ease;
+            font-size: 18px;
+        }
+
+        section > div:hover .book-button {
+            display: block; /* Show the button on hover */
+        }
+
+        .book-button:hover {
+            background-color: #e8d8b7;
+        }
+
+.design
+{
+            position: relative;
+            width: 100%;
+            padding: 20px;
+            border-radius: 50px;
+            box-sizing: border-box;
+            background-color: #f0f0f0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for a subtle effect */
+            transition: box-shadow 0.3s ease;
+            text-align: center;
+}
+    </style>
+</head>
+<body><center>
+
+    <section>
+        <div id="packageA">
+            <h2>Package A: Daytime Delight</h2>
+            <img src="https://scontent.fmnl4-4.fna.fbcdn.net/v/t1.15752-9/403412500_363472266265989_723463570427345844_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=t0j0PFasHqUAX8RcRsJ&_nc_ht=scontent.fmnl4-4.fna&oh=03_AdQOgeByw6uKi8Jpf640CGYedPT-0WUhsrzZxQrdJJGdxg&oe=65A30071" height="250" width="350">
+
+<div class = "design">
+    <h3><strong>Outdoor Playtime Extravaganza:</strong></h3>
+<h4>Treat your pet to a joyful outdoor playtime filled with sunshine and delight. Engage them in playful activities and pamper their coat with our premium, pet-friendly grooming essentials. Our carefully chosen products are designed to keep their fur lustrous and fragrant.</h4>
+<h3><strong>Sun-Kissed Grooming and Gentle Brushing:</strong></h3>
+<h4>After the lively play session, our skilled groomers will delicately tend to your pet's coat, ensuring it stays vibrant and well-maintained under the sun. This step not only enhances their appearance but also contributes to a healthy and glossy coat.</h4>
+<h3><strong>Outdoor Ear-Care Bliss:</strong></h3>
+<h4>Our outdoor experience extends to detailed ear care. Our expert professionals provide gentle and thorough ear cleaning, ensuring hygiene and contributing to your pet's overall well-being as they bask in the outdoor atmosphere.</h4>
+<h3><strong>Relaxation in Nature's Embrace:</strong></h3>
+<h4>Throughout the entire outdoor experience, we prioritize your pet's comfort and enjoyment. Our dedicated staff is trained to create a playful and serene environment, ensuring a stress-free and delightful day of outdoor play for your cherished companion.</h4><br><br><br>
+</div>
+            <button class="book-button" onclick="bookPackage('A')">Book Package A</button>
+        </div>
+
+        <div id="packageB">
+            <h2>Package B: Stay and Play</h2>
+            <img src="https://scontent.fmnl4-2.fna.fbcdn.net/v/t1.15752-9/393184246_382327007789239_2459952497682013356_n.png?_nc_cat=106&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=QiaAty-Ax9EAX_DBBEr&_nc_ht=scontent.fmnl4-2.fna&oh=03_AdSUMiE7pz9KKn2DaKodz2h87GoXIZzz-VoI7kk1EOk3oA&oe=65A2E972">
+
+<div class = "design">
+    <h3><strong>Extended Stay :</strong></h3>
+<h4>For pets in need of an extended day of care, Package B offers an enriched stay with a variety of activities and toys designed to keep your pet entertained and happy.</h4>
+<h3><strong>Prioritizing Mental Stimulation:</strong></h3>
+<h4>Mental stimulation is a top priority in Package B. Our dedicated caretakers provide engaging activities tailored to your pet's preferences, ensuring they have a stimulating and enjoyable experience throughout their extended stay.</h4>
+<h3><strong>Delicious and Nutritious Meals:</strong></h3>
+<h4>Your pet will be treated to two delicious meals crafted by our experienced staff. These meals are thoughtfully designed to meet your pet's dietary preferences, providing a satisfying and nourishing experience during their extended stay.</h4><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+ </div>    
+            <button class="book-button" onclick="bookPackage('B')">Book Package B</button>
+        </div>
+
+        <div id="packageC">
+            <h2>Package C: Ultimate Staycation </h2>
+            <img src="https://scontent.fmnl4-4.fna.fbcdn.net/v/t1.15752-9/393205494_233661523091076_2116016933540998435_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=ibiwt0qBtx8AX8yU9O8&_nc_ht=scontent.fmnl4-4.fna&oh=03_AdQoYTQlRcdmsiXQUZPn3gE7Y64X3GBp5vaUW2HnZESxdg&oe=65A2E644" height="250" width="350">
+
+<div class = "design">
+    <h3><strong>Luxury Retreat Experience:</strong></h3>
+    <h4>Indulge your pet in a luxury retreat, providing a full day of play, exercise, and socialization in a secure and loving environment.</h4>
+    <h3><strong>Comfortable Haven with Premium Bedding:</strong></h3>
+    <h4>Package C ensures your pet enjoys a haven of comfort with premium bedding, offering a cozy space for relaxation between lively play sessions. Our facility is carefully designed to create a secure and loving environment for their ultimate well-being.</h4>
+    <h3><strong>Pampering and Personal Attention:</strong></h3>
+    <h4>Our dedicated staff provides pampering and one-on-one attention in Package C, offering special treats and personalized interactions to make your pet feel truly cherished during their stay. Whether it's a delightful treat or a customized play session, we aim to create an unparalleled and memorable experience for your furry friend.</h4><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    
+</div>
+
+            <button class="book-button" onclick="bookPackage('C')">Book Package C</button>
+        </div>
+    </section>
+
+    <script>
+        function bookPackage(packageName) {
+            // You can add logic here to handle the booking for the selected package
+            window.location.href = "Appointment.html";
+        }
+    </script>
+</body>
+</html>
