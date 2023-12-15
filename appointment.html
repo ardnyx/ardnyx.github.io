@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pet Daycare Appointment Registration</title>
+
+  <style>
+    body {
+      font-family: Helvetica;
+      background-color: beige;
+      padding: 20px;
+cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385542012_742720367705438_8505801103636760152_n.png?stp=cp0_dst-png&_nc_cat=109&ccb=1-7&_nc_sid=510075&_nc_eui2=AeEDOaoODKPpQ8CGodwzN_lO6YB107fDM7TpgHXTt8MztIf4h0U_gPgpbBLNycOcbhDOoZga8OWgBrgfev25rb6F&_nc_ohc=zYuMCWaPV48AX9y5BDa&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdROmeWw4Qdj-_xXsZP569YTGq7gPr-YaxHQRVrtidhktw&oe=659C5275'), auto;
+    }
+.bg {
+      background-position: -50px 0;
+      background-size: 20%;
+      background-repeat: no-repeat;
+
+}
+form, label {
+cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385542012_742720367705438_8505801103636760152_n.png?stp=cp0_dst-png&_nc_cat=109&ccb=1-7&_nc_sid=510075&_nc_eui2=AeEDOaoODKPpQ8CGodwzN_lO6YB107fDM7TpgHXTt8MztIf4h0U_gPgpbBLNycOcbhDOoZga8OWgBrgfev25rb6F&_nc_ohc=zYuMCWaPV48AX9y5BDa&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdROmeWw4Qdj-_xXsZP569YTGq7gPr-YaxHQRVrtidhktw&oe=659C5275'), auto;}
+
+input, textarea {
+  cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;
+}
+    
+    h1, h2 {
+      color: #333;
+    }
+    
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"], 
+    input[type="time"],
+    textarea {
+      border-radius: 30px;
+      padding: 10px 20px;
+      width: 90%
+    }
+    
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-right: 10px;
+    } 
+    
+    input[type="button"] {
+  background-color: #c27400;
+  display: block;
+  margin: 0 auto;
+  color: white;
+  padding: 12px 20px;
+  border: none; 
+  border-radius: 5px;
+  cursor: pointer;
+    }
+    #appointmentInfo {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #e0f7fa;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+    }
+
+    #confirmationMessage {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #fullInformation {
+      margin-top: 20px;
+    }
+
+    #fullInformation p {
+      margin-bottom: 10px;
+    }
+  </style>
+
+</head>
+  <script>
+function bookAppointment() {
+    // Get pet owner information
+    var fullName = document.getElementById('fullName').value;
+    var emailAddress = document.getElementById('emailAddress').value;
+    var phoneNumber = document.getElementById('phoneNumber').value;
+    var address = document.getElementById('address').value;
+
+    // Get pet information
+    var petName = document.getElementById('petName').value;
+    var petType = document.querySelector('input[name="petType"]:checked').value;
+    var breed = document.getElementById('breed').value;
+    var age = document.getElementById('age').value;
+    var weight = document.getElementById('weight').value;
+    var specialNeeds = document.getElementById('specialNeeds').value;
+
+    // Get booking details
+    var service = document.getElementById('service').value;
+    var preferredDate = document.getElementById('preferredDate').value;
+    var preferredTime = document.getElementById('preferredTime').value;
+    var duration = document.getElementById('duration').value;
+    var instructions = document.getElementById('instructions').value;
+
+    // Get emergency contact information
+    var emergencyContactName = document.getElementById('emergencyContactName').value;
+    var emergencyContactPhone = document.getElementById('emergencyContactPhone').value;
+
+    // Get additional services
+    var additionalServices = document.getElementById('additionalServices').value;
+
+    // Get vaccination information
+    var proofOfVaccination = document.getElementById('proofOfVaccination').value;
+
+    // Get agreement to terms and conditions
+    var agreeToTerms = document.getElementById('agreeToTerms').checked;
+
+    // Get medical authorization
+    var medicalAuthorization = document.getElementById('medicalAuthorization').checked;
+
+    // Display a confirmation message
+    alert('Appointment booked for ' + fullName + "'s pet " + petName + '.\nWe will contact you at ' + emailAddress + ' for further details.');
+}
+  </script>
+</head>
+<body>
+<div><center>
+<img src="https://scontent.fmnl4-4.fna.fbcdn.net/v/t1.15752-9/403612200_1005844493848944_6943229499898744737_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=x3qUejZb_NYAX8Gwffy&_nc_ht=scontent.fmnl4-4.fna&oh=03_AdRS2r1PV9sFal-K5Xz3rF-6eBYHz02p-6r70Qagw93-VA&oe=65A305E4" alt="PawDay" class = "bg">
+</div>
+  <form>
+    <h1 style = "color:#DCA12E; text-align: center;">Book an a-paw-intment with us!</h1>
+    <h2>Pet Owner Information:</h2>
+    <label for="fullName">Full Name:</label>
+    <input type="text" id="fullName" name="fullName" required><br><br>
+
+    <label for="emailAddress">Email Address:</label>
+    <input type="email" id="emailAddress" name="emailAddress" required><br><br>
+
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="tel" id="phoneNumber" name="phoneNumber" required><br><br>
+
+    <label for="address">Address (optional):</label>
+    <textarea id="address" name="address"></textarea><br><br>
+
+    <h2>Pet Information:</h2>
+    <label for="petName">Pet's Name:</label>
+    <input type="text" id="petName" name="petName" required><br><br>
+
+    <h2>Pet Information:</h2>
+    <label>Pet's Name:</label>
+    <input type="text" id="petName" name="petName" required><br><br>
+    
+    <label>Type of Pet:</label>
+    <input type="radio" id="dog" name="petType" value="dog" style = "  cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;" required>Dog
+    
+    <input type="radio" id="cat" name="petType" value="cat"  style = "  cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;" required>Cat
+    <label for="cat">Cat</label>
+
+    <label for="breed">Breed:</label>
+    <input type="text" id="breed" name="breed" required><br><br>
+
+    <label for="age">Age:</label>
+    <input type="text" id="age" name="age" required><br><br>
+
+    <label for="weight">Weight:</label>
+    <input type="text" id="weight" name="weight" required><br><br>
+
+    <label for="specialNeeds">Any Special Needs or Medical Conditions:</label>
+    <textarea id="specialNeeds" name="specialNeeds"></textarea><br><br>
+
+    <h2>Booking Details:</h2>
+    <label for="service">Desired Service (e.g., daycare, boarding, grooming):</label>
+    <input type="text" id="service" name="service" required><br><br>
+
+    <label for="preferredDate">Preferred Date:</label>
+    <input type="date" id="preferredDate" name="preferredDate" required><br><br>
+
+    <label for="preferredTime">Preferred Time:</label>
+    <input type="time" id="preferredTime" name="preferredTime" required><br><br>
+
+    <label for="duration">Duration of Stay (for boarding or daycare):</label>
+    <input type="text" id="duration" name="duration"><br><br>
+
+    <label for="instructions">Special Instructions or Requests:</label>
+    <textarea id="instructions" name="instructions"></textarea><br><br>
+
+    <h2>Emergency Contact:</h2>
+    <label for="emergencyContactName">Emergency Contact Name:</label>
+    <input type="text" id="emergencyContactName" name="emergencyContactName" required><br><br>
+
+    <label for="emergencyContactPhone">Emergency Contact Phone Number:</label>
+    <input type="tel" id="emergencyContactPhone" name="emergencyContactPhone" required><br><br>
+
+    <h2>Additional Services:</h2>
+    <label for="additionalServices">Additional Services Requested:</label>
+    <textarea id="additionalServices" name="additionalServices"></textarea><br><br>
+
+    <h2>Vaccination Information:</h2>
+    <label for="proofOfVaccination">Proof of Vaccination:</label>
+    <input type="text" id="proofOfVaccination" name="proofOfVaccination" required><br><br>
+
+    <h2>Agreement to Terms and Conditions:</h2>
+    <label>
+      <input type="checkbox" id="agreeToTerms" name="agreeToTerms" required>
+      I have read and agree to the terms and conditions.
+    </label><br><br>
+
+    <h2>Medical Authorization:</h2>
+    <label>
+      <input type="checkbox" id="medicalAuthorization" name="medicalAuthorization" required>
+      I authorize emergency medical care for my pet if needed.
+    </label><br><br>
+
+    <input type="button" value="Book Appointment" onclick="bookAppointment()" style = "  cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;">
+  </form>
+  <div id="appointmentInfo">
+    <h2>Appointment Information</h2>
+    <!-- Display submitted information here -->
+    <p id="confirmationMessage"></p>
+    <p>
+      To complete your booking, please take a screenshot of this information and send it to pawday.pet@gmail.com.
+      Follow these steps:
+    </p>
+    <ol>
+      <li>Press <strong>Print Screen</strong> or <strong>PrtScn</strong> on your keyboard to capture the entire screen.</li>
+      <li>Open an image editing tool (like Paint or any other image editor).</li>
+      <li>Paste the screenshot (<strong>Ctrl+V</strong>) and save the image.</li>
+      <li>Attach the saved image to an email and send it to <strong><a href="mailto:pawday.pet@gmail.com" style = "  cursor: url('https://scontent.xx.fbcdn.net/v/t1.15752-9/385550852_7012448422137629_5159878909276906728_n.png?stp=cp0_dst-png&_nc_cat=103&ccb=1-7&_nc_sid=510075&_nc_eui2=AeE-UAZm0JM9uZbj5YzGn8bWb1wY5Zv0c6pvXBjlm_RzqhJ7Jf2Ig8R_66ezuy-1FGXZ12tTwPP27mDZ__QfD2qO&_nc_ohc=O1pG5OOOx9YAX-cujez&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdSItl5Xerx8ITT6Z7HKAW3LXVc0zS9VmpXrB113vuXyIA&oe=659C60AF'), pointer;">pawday.pet@gmail.com</a></strong>.</li>
+    </ol>
+  </div>
+  <script>
+  function bookAppointment() {
+    // Get pet owner information
+    var fullName = document.getElementById('fullName');
+    var emailAddress = document.getElementById('emailAddress');
+    var phoneNumber = document.getElementById('phoneNumber');
+    var address = document.getElementById('address');
+
+    // Check if all required fields are filled
+    if (!fullName.value || !emailAddress.value || !phoneNumber.value) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    // Get pet information (same for other sections)
+    var petName = document.getElementById('petName');
+    var petType = document.querySelector('input[name="petType"]:checked');
+    var breed = document.getElementById('breed');
+    // ... (similar for other fields)
+
+    // Check if all required fields in the pet information section are filled
+    if (!petName.value || !petType || !breed.value) {
+      alert('Please fill in all required fields in the Pet Information section.');
+      return;
+    }
+
+    // ... (similar checks for other sections)
+
+    // Display the confirmation message and popup
+    var appointmentInfo = document.getElementById('appointmentInfo');
+    var confirmationMessage = document.getElementById('confirmationMessage');
+
+    // Construct a message displaying the submitted information
+    var message = 'Appointment booked for ' + fullName.value + '\'s pet ' + petName.value + '.\nWe will contact you at ' + emailAddress.value + ' for further details.';
+    confirmationMessage.innerText = message;
+
+    // Show the popup
+    appointmentInfo.style.display = 'block';
+  }
+</script>
+</body>
+</html>
