@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Page</title>
+  <style>
+    body {
+    background: url('https://scontent.fmnl4-2.fna.fbcdn.net/v/t1.15752-9/385530707_313004944976112_2759597517287644661_n.png?_nc_cat=105&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=hs5lLNmHqKIAX9TqWoo&_nc_ht=scontent.fmnl4-2.fna&oh=03_AdTjHWmhGz1pAZezTo5toeT4dWCxuVIxI7XCvp95MVTGSg&oe=659F989C') center center fixed;
+      margin: 0;
+      font-family: 'Trebuchet MS', sans-serif;
+      font-size: 12px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #333; 
+      margin-top: 0;
+      padding: 0;
+            transition: backdrop-filter 0.3s ease;
+        }
+
+h2 {
+  text-align: center;
+  margin-bottom: 15px;  
+  font-size: 40px;
+color: #DCA12E;
+}
+
+.container {
+  box-sizing: content-box;
+  max-width: 800px;
+  height: 50%; /* Set the height to 50% of the viewport height */
+  margin: auto;
+  padding: 20px;
+  background-color:#f5f2e6;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  border: 1px solid #ddd;
+  border-radius: 20px;
+}
+
+    header img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .contact-form {
+      width: 60%; /* Adjust the width of the form as needed */
+      float: left; /* Float the form to the left */
+      max-width: 400px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+
+    /* Adjust the width of the submit button and change its color to brown */
+    .contact-form input[type="submit"] {
+      width: calc(100% - 3px); /* Adjust the width here */
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      background-color: #CFB274; /* Change button color to brown */
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-sizing: border-box; /* Include padding and border in width calculation */
+      margin-left: 200px;
+    }
+
+    .contact-form input[type="text"],
+    .contact-form textarea {
+      width: calc(100% - 22px);
+      padding: 8px;
+      border-radius: 5px #DCA12E;
+      margin-bottom: 10px;
+      margin-left: 200px;
+
+    }
+
+
+    /* Clear floats */
+    .container::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .contact-form textarea {
+      resize: vertical;
+    }
+
+    .addresspic {
+     padding: 40px 20px;
+     background-color: white;
+     color: black;
+     border: none;
+     border-radius: 4px;
+     transform: translate(-22%, -435%);
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+     opacity: 0.8;
+    }
+
+    .address {
+        font-family: 'Trebuchet MS', sans-serif;
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .phonepic {
+     padding: 40px 70px;
+     background-color: white;
+     color: black;
+     border: none;
+     border-radius: 4px;
+     transform: translate(92%, -535%);
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+     opacity: 0.8;
+    }
+
+    .phone {
+        font-family: 'Trebuchet MS', sans-serif;
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .emailpic {
+     padding: 40px 30px;
+     background-color: white;
+     color: black;
+     border: none;
+     border-radius: 4px;
+     transform: translate(245%, -635%);
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+     opacity: 0.8;
+    }
+
+    .email {
+        font-family: 'Trebuchet MS', sans-serif;
+        color: black;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .contact-address,
+    .contact-email,
+    .contact-number {
+        transform: translate(-1%, -870%);
+        color: #ffffff;
+    }
+
+    .name{ 
+        margin-left: 380px;
+    }
+    .message {
+        margin-left: 348px;
+    }
+    .required { 
+        margin-left: 357px;
+    }
+  </style>
+</head>
+<body>
+  <br>
+  <br>
+  <div class="container">
+    <header>
+      <img src="https://scontent.fmnl8-3.fna.fbcdn.net/v/t1.15752-9/403408862_1151228072528700_8423305160271081841_n.png?_nc_cat=102&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeHAPECwszYMBw1axsGmaR8VZRr-0Z-33GhlGv7Rn7fcaJvlTFeUDY7xasYwRdhGmyb_2O_BlwZ5bmAo6t7zIF1N&_nc_ohc=NflU7JzbuK0AX-9WB8j&_nc_ht=scontent.fmnl8-3.fna&oh=03_AdTuhBbiKbazR8sv-TqunAFXgX0p2691sU_GVGq0GmG4Hw&oe=65A233C5" width="100%" alt="Header Image">
+    </header>
+    <h2>Get in touch with us</h2>
+    <br>
+    <div class="contact-form">
+      <form action="#" method="post">
+        <label for="name" class="name">NAME</label><br>
+        <input type="text" id="name" name="name" required>
+
+        <label for="message" class="message">Message(Required)*</label><br>
+        <textarea id="message" name="message" rows="4" required></textarea>
+        
+        <label for="email" class="required">Email(Required)*</label><br>
+        <input type="text" id="email" name="email" required>
+        
+        <!-- Adjusted width for the submit button -->
+
+        <br>
+        <br>
+
+        <input type="submit" value="Submit">
+        </form>
+
+        <button type="button" class="addresspic"><b class="address">ADDRESS</b><br> <br>#63 Villanueva St. Imus, Cavite </button>
+        <button type="button" class="phonepic"><b class="phone">PHONE</b><br> <br>09763289650</button>
+        <button type="button" class="emailpic"><b class="email">EMAIL</b><br> <br><a href="mailto:pawday.pet@gmail.com">pawday.pet@gmail.com</a></button>    
+
+  
+    </div>
+  </div>
+</body>
+</html>
