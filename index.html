@@ -3,965 +3,125 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio</title>
+  <title>Portfolio — Cybersecurity & Development</title>
+  <meta name="description" content="Cybersecurity enthusiast and developer portfolio. Projects, CTF writeups, malware analysis, achievements, and certifications." />
+  <meta name="theme-color" content="#0f0f10" />
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #1f1f1e;
-      --surface: #272726;
-      --surface2: #2e2e2c;
-      --border: #383836;
-      --border-bright: #4a4a47;
-      --text: #e8e6e0;
-      --text-muted: #7a7a75;
-      --text-dim: #4a4a47;
-      --accent: #c8b89a;
-      --accent2: #8fb3a0;
-      --accent3: #a89bb5;
-      --gap: 3px;
-      --radius: 2px;
-    }
-
-    html, body {
-      width: 100%; height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Mono', monospace;
-      overflow: hidden;
-    }
-
-    /* ── SHELL ── */
-    #shell {
-      display: flex;
-      flex-direction: column;
-      width: 100vw;
-      height: 100vh;
-    }
-
-    #statusbar {
-      flex: 0 0 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 14px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      user-select: none;
-      z-index: 10;
-    }
-    #statusbar .sb-left { display: flex; align-items: center; gap: 16px; }
-    #statusbar .sb-right { display: flex; align-items: center; gap: 16px; }
-    .sb-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0.7; }
-    #page-indicator { color: var(--accent); font-weight: 500; }
-
-    #viewport {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* ── TILING GRID ── */
-    #grid {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      gap: var(--gap);
-      padding: var(--gap);
-      transition: opacity 0.25s ease;
-    }
-
-    /* ── TILE ── */
-    .tile {
-      position: relative;
-      background: color-mix(in srgb, var(--tile-accent, var(--accent)) 15%, var(--surface));
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color 0.2s ease, background 0.2s ease;
-      min-width: 0; min-height: 0;
-    }
-    .tile:hover { border-color: var(--border-bright); background: color-mix(in srgb, var(--tile-accent, var(--accent)) 25%, var(--surface2)); }
-    .tile::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    /* tile color accent strip */
-    .tile::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: var(--tile-accent, var(--accent));
-      opacity: 0.6;
-    }
-
-    /* ── TILE INNER ── */
-    .tile-inner {
-      position: absolute;
-      inset: 0;
-      padding: 2%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      overflow: hidden;
-    }
-
-    /* FULL view (scrollable content inside expanded tile) */
-    .tile-inner.scrollable {
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border-bright) transparent;
-    }
-    .tile-inner.scrollable::-webkit-scrollbar { width: 4px; }
-    .tile-inner.scrollable::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
-
-    .tile-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.1;
-      width: 100%;
-      text-align: center;
-      white-space: normal;
-      word-break: normal;
-      overflow-wrap: break-word;
-      /* Max defaults set via JS fitTitles */
-    }
-
-    .tile-initials, .tile-desc, .tile-link {
-      display: none !important;
-    }
-    
-    .tile-tags {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-    .tag {
-      font-size: 9px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 2px 6px;
-      border: 1px solid var(--border-bright);
-      border-radius: 1px;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    /* ── SIZE MODES ── */
-    .tile[data-size="tiny"] .tile-inner { padding: 8px; }
-    .tile[data-size="tiny"] .tile-title,
-    .tile[data-size="tiny"] .tile-tags,
-    .tile[data-size="tiny"] .tile-content-body { display: none; }
-    .tile[data-size="tiny"] .tile-initials { display: flex !important; align-items: center; justify-content: center; height: 100%; }
-
-    .tile[data-size="micro"] .tile-inner { padding: 0; }
-    .tile[data-size="micro"] .tile-title,
-    .tile[data-size="micro"] .tile-tags,
-    .tile[data-size="micro"] .tile-initials,
-    .tile[data-size="micro"] .tile-content-body { display: none; }
-
-    .tile[data-size="small"] .tile-tags,
-    .tile[data-size="small"] .tile-content-body { display: none; }
-
-    .tile[data-size="medium"] .tile-content-body { display: none; }
-
-    /* ── EXPANDED OVERLAY ── */
-    #overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 50;
-      pointer-events: none;
-      opacity: 0;
-    }
-    #overlay.active {
-      pointer-events: all;
-      opacity: 1;
-    }
-
-    #expanded-tile {
-      position: absolute;
-      background: var(--surface);
-      border: 1px solid var(--border-bright);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: top 0.38s cubic-bezier(0.16,1,0.3,1),
-                  left 0.38s cubic-bezier(0.16,1,0.3,1),
-                  width 0.38s cubic-bezier(0.16,1,0.3,1),
-                  height 0.38s cubic-bezier(0.16,1,0.3,1),
-                  opacity 0.2s ease;
-      will-change: top, left, width, height;
-    }
-    #expanded-tile::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: var(--tile-accent, var(--accent));
-      z-index: 2;
-    }
-    #expanded-tile .exp-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      padding: 18px 20px 10px;
-      gap: 12px;
-      flex-shrink: 0;
-      border-bottom: 1px solid var(--border);
-    }
-    #expanded-tile .exp-title {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(18px, 2.5vw, 32px);
-      color: var(--text);
-      line-height: 1.1;
-    }
-    #expanded-tile .exp-close-hint {
-      font-size: 9px;
-      color: var(--text-dim);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      padding-top: 4px;
-    }
-    #expanded-tile .exp-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 18px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border-bright) transparent;
-    }
-    #expanded-tile .exp-body::-webkit-scrollbar { width: 4px; }
-    #expanded-tile .exp-body::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
-    #expanded-tile .exp-desc {
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--text-muted);
-      max-width: 680px;
-    }
-    #expanded-tile .exp-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-    #expanded-tile .exp-links { display: flex; flex-direction: column; gap: 6px; }
-    #expanded-tile .exp-content {
-      font-size: 13px;
-      line-height: 1.75;
-      color: var(--text-muted);
-      max-width: 720px;
-    }
-    #expanded-tile .exp-content h3 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 15px;
-      color: var(--text);
-      margin-top: 16px;
-      margin-bottom: 6px;
-    }
-    #expanded-tile .exp-content p { margin-bottom: 10px; }
-    #expanded-tile .exp-content ul { padding-left: 16px; margin-bottom: 10px; }
-    #expanded-tile .exp-content li { margin-bottom: 4px; }
-    #expanded-tile .exp-content a { color: var(--tile-accent, var(--accent)); }
-    #expanded-tile {
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ── BACK GLASS / scrim ── */
-    #scrim {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      z-index: 40;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      backdrop-filter: blur(1px);
-    }
-    #scrim.active { opacity: 1; pointer-events: all; cursor: pointer; }
-
-    /* ── PAGE NAV ── */
-    #pagenav {
-      position: absolute;
-      bottom: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--surface2);
-      border: 1px solid var(--border-bright);
-      border-radius: 2px;
-      padding: 6px 10px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      transform: translateX(-50%) translateY(10px);
-    }
-    #pagenav.visible {
-      opacity: 1;
-      pointer-events: all;
-      transform: translateX(-50%) translateY(0);
-    }
-    #pagenav button {
-      background: none;
-      border: 1px solid var(--border-bright);
-      color: var(--text-muted);
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      padding: 4px 10px;
-      cursor: pointer;
-      border-radius: 1px;
-      transition: background 0.15s, color 0.15s;
-      text-transform: uppercase;
-    }
-    #pagenav button:hover, #pagenav button.active-page { background: var(--border-bright); color: var(--text); }
-    #pagenav .page-dots { display: flex; gap: 5px; align-items: center; padding: 0 4px; }
-    .page-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--border-bright);
-      cursor: pointer;
-      transition: background 0.15s, transform 0.15s;
-    }
-    .page-dot.active { background: var(--accent); transform: scale(1.3); }
-
-    /* ── NOISE TEXTURE ── */
-    #noise {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 200px 200px;
-    }
-
-
-    /* ── ESC HINT TOAST ── */
-    #esc-hint {
-      position: absolute;
-      bottom: 22px;
-      left: 50%;
-      transform: translateX(-50%) translateY(14px);
-      z-index: 80;
-      background: rgba(30, 30, 28, 0.82);
-      border: 1px solid var(--border-bright);
-      border-radius: 20px;
-      padding: 6px 16px 6px 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      white-space: nowrap;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    }
-    #esc-hint.visible {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-    #esc-hint .esc-key {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--surface2);
-      border: 1px solid var(--border-bright);
-      border-radius: 4px;
-      padding: 1px 6px;
-      font-size: 9px;
-      color: var(--text);
-      font-family: 'DM Mono', monospace;
-      letter-spacing: 0.05em;
-      line-height: 1.6;
-    }
-
-    /* ── CONTAINER QUERIES ── */
-    .tile { container-type: size; }
-  </style>
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-<div id="noise"></div>
+  <!-- Noise texture overlay -->
+  <div id="noise" aria-hidden="true"></div>
 
-<div id="shell">
-  <div id="statusbar">
-    <div class="sb-left">
-      <div class="sb-dot"></div>
-      <span id="owner-name">portfolio</span>
-      <span id="tile-count-label">0 projects</span>
-    </div>
-    <div class="sb-right">
-      <span id="page-indicator">pg 1</span>
-    </div>
-  </div>
-  <div id="viewport">
-    <div id="grid"></div>
-    <div id="scrim"></div>
-    <div id="overlay">
-      <div id="expanded-tile" style="--tile-accent: var(--accent)"></div>
-    </div>
-    <div id="esc-hint"><span class="esc-key">ESC</span> to go back</div>
-    <div id="pagenav">
-      <button id="btn-prev">← prev</button>
-      <div class="page-dots" id="page-dots"></div>
-      <button id="btn-next">next →</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ─────────────────────────────────────────────
-//  INPUT DATA — edit this array to add your projects
-// ─────────────────────────────────────────────
-const PROJECTS = [
-  {
-    title: "CTF Writeups",
-    description: "Compilation of detailed documentation of what solution I took on solving various CTF challenges. Tools that I commonly use are IDA for disassembly, gdb for debugging, and WSL2 for using Linux tools.",
-    tags: ["Reverse Engineering", "CTF", "Debugging"],
-    links: [
-      { label: "GitHub", url: "https://github.com/ardnyx/ctf-writeups" },
-    ],
-    content: `
-      <div style="display: flex; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
-        <img src="images/first_branches.png" alt="screenshot of a disassembly with the first branches highlighted" style="flex: 1; min-width: 200px; max-width: 400px; border-radius: var(--radius); object-fit: contain;" />
-        <img src="images/strlen.png" alt="strlen disassembly" style="flex: 1; min-width: 200px; max-width: 400px; border-radius: var(--radius); object-fit: contain;" />
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="#hero" class="nav-logo">portfolio</a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-links">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#writeups" class="nav-link">Writeups</a>
+        <a href="#achievements" class="nav-link">Achievements</a>
+        <a href="#contact" class="nav-link">Contact</a>
       </div>
-      <h3>Overview</h3>
-      <p>Primarily focused in reverse engineering and low-level debugging, I have compiled the challenges and writeups that I did for the CTF challenges that I have solved. Tools used were IDA, and the GDB debugger using the pwndbg plugin to make the viewing easier.</p>
-      `,
-    accent: "#e8845a"
-  },
-  {
-    title: "Modded Tetris",
-    description: "A custom-made tetris with different game modes; chromatic cascade, reversed flex, time trial, flashlight, and classic. A project for the course Application Development.",
-    tags: ["Web Development", "Vanilla JS"],
-    links: [
-      { label: "GitHub", url: "https://github.com/ardnyx/tetris" },
-    ],
-    content: `
-      <h3>Overview</h3>
-      <p>A custom-made classic tetris + 4 different complex gamemodes. Currently, the website is not available for mobile and it is not meant to be played in it (for now). If there are any issues (aside from the ones that are stated below), please open an issue in the "Issues" tab. You can also open suggestions and advices in this tab, not just issues. As of now, the website still suffers from a few styling issues provided in the repository.</p>
-      <h3>Technical Details</h3>
-      <p>The stack used in the development of this project is just plain HTML, CSS, and JS.</p>
-      <img src=images/tetris.png alt="screenshot of the tetris game" style="width: 100%; max-width: 400px; border-radius: var(--radius);" />
-    `,
-    accent: "#BF40BF"
-  },
-  {
-    title: "IT Skills Olympics 2024",
-    description: "2nd runner up; with over 60 participating partner colleges and universities",
-    tags: ["Cybersecurity", "CTF"],
-    content: `
-      <img src=images/makati_ctf.png style="width: 100%; max-width: 400px; border-radius: var(--radius);" />
-      <h3>Overview</h3>
-      <p>My first CTF competition, where it was strictly an offline competition that lasted 2 hours. It tested our vocabulary and basic knowledge in cybersecurity, and it was highly focused on computer networking. Reconnaissance techniques, exploits using Metasploit, and the likes were the core of this competition.</p>
-    `,
-    accent: "#DAEC55"
-  },
-  {
-    title: "Hack The Beat: CTF 2025",
-    description: "Participant; with over 20 competiting teams from different schools around Metro Manila.",
-    tags: ["Cybersecurity", "CTF"],
-    content: `
-      <img src=images/jissa_ctf.png style="width: 100%; max-width: 400px; border-radius: var(--radius);" />
-      <h3>Overview</h3>
-      <p>The second CTF Competition, this was where I was really exposed to "real" exploitation. There were a handful of challenges in this one, such as cryptography, OSINT, reverse engineering, and forensics (and the challenges had something to do with audio files). I focused and excelled mainly on OSINT and brute forcing digital forensic challenges. I even tried attempting a hard reverse engineering challenge during the last hour but as expected, I didn't manage to beat it.</p>
-      <h3> Skills Learned </h3>
-      <ul>
-        <li>Steganography tools: binwalk, Steghide, foremost</li>
-        <li>OSINT Techniques</li>
-      `,
-    accent: "#D60000"
-  },
-  {
-    title: "Payroll System",
-    description: "Developed and deployed a web-based comprehensive payroll system for a local beauty & personal care business with around 60 employees; in compliance with our Academic Service Learning.",
-    tags: ["Web Development", "CI/CD", "Django"],
-    content: `
-      <div style="display: flex; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
-        <img src="images/asl_1.png" alt="screenshot of a disassembly with the first branches highlighted" style="flex: 1; min-width: 200px; max-width: 400px; border-radius: var(--radius); object-fit: contain;" />
-        <img src="images/asl_2.png" alt="strlen disassembly" style="flex: 1; min-width: 200px; max-width: 400px; border-radius: var(--radius); object-fit: contain;" />
-        <img src="images/asl_3.png" alt="strlen disassembly" style="flex: 1; min-width: 200px; max-width: 400px; border-radius: var(--radius); object-fit: contain;" />
-      </div>
-      <h3>Overview</h3>
-      <p>A major development project that we created using the Django framework. My role in this project was overseeing the task delegation (primarily Project Management), designing the UI, and handling the deployment in GHCR through Docker, setting up Github Actions for basic CI/CD so that whenever we push an update to the website, the deployed product would receive an update notification and the backend will handle everything; all without affecting their database.</p>
-      <h3> Skills Learned </h3>
-      <ul>
-        <li>Github Container Registry</li>
-        <li>CI/CD</li>
-        <li>Containerization (Docker)</li>
-        <li>Django</li>
-        <li>Project Management Skills</li>
-        <li>Figma</li>
-      `,
-    accent: "#DC7FD4"
-  },
-];
-
-// ─────────────────────────────────────────────
-//  CONFIG
-// ─────────────────────────────────────────────
-const PAGE_SIZE = 7;
-const ACCENTMAP = [
-  "#e8845a",  // warm orange
-  "#5b9bd5",  // sky blue
-  "#c97db5",  // dusty rose / mauve
-  "#6abf8a",  // sage green
-  "#e8c45a",  // golden yellow
-  "#7d9ee8",  // periwinkle
-  "#e86a6a",  // coral red
-  "#5acec4",  // teal
-  "#d4845a",  // terracotta
-  "#a07de8",  // soft violet
-  "#7dba5a",  // lime green
-  "#e87da0",  // hot pink
-  "#5a9ee8",  // cornflower blue
-  "#e8a85a",  // amber
-  "#5ae8b5",  // mint
-  "#c45a5a",  // brick red
-];
-
-// ─────────────────────────────────────────────
-//  STATE
-// ─────────────────────────────────────────────
-let currentPage = 0;
-let expandedIdx = null;
-let isAnimating = false;
-
-// ─────────────────────────────────────────────
-//  HELPERS
-// ─────────────────────────────────────────────
-function getInitials(title) {
-  return title.split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 3);
-}
-
-function totalPages() {
-  return Math.max(1, Math.ceil(PROJECTS.length / PAGE_SIZE));
-}
-
-function pageProjects() {
-  const start = currentPage * PAGE_SIZE;
-  return PROJECTS.slice(start, start + PAGE_SIZE);
-}
-
-// ─────────────────────────────────────────────
-//  GRID LAYOUT ALGORITHM
-//
-//  Rules:
-//  - n=1  : single tile, fills everything
-//  - even : balanced grid, all tiles equal
-//  - odd  : dominant tile spans full height,
-//           alternating sides per odd count:
-//             3=left, 5=right, 7=left, 9=right…
-//
-//  Returns { cols, rows, placements[] }
-//  placements[i] = { colStart, rowStart, colSpan, rowSpan }
-// ─────────────────────────────────────────────
-function computeLayout(n) {
-  if (n === 0) return null;
-
-  if (n === 1) {
-    return {
-      cols: 1, rows: 1,
-      placements: [{ colStart: 1, rowStart: 1, colSpan: 1, rowSpan: 1 }]
-    };
-  }
-
-  const isOdd = n % 2 !== 0;
-
-  if (!isOdd) {
-    // Even: balanced grid, auto-flow, all tiles equal
-    const cols = Math.ceil(Math.sqrt(n));
-    const rows = Math.ceil(n / cols);
-    const placements = Array.from({ length: n }, () =>
-      ({ colStart: 'auto', rowStart: 'auto', colSpan: 1, rowSpan: 1 })
-    );
-    return { cols, rows, placements };
-  }
-
-  // Odd (n >= 3): one dominant tile spanning full height
-  // oddRank: 0=first odd(3), 1=second odd(5), 2=third odd(7), …
-  // Even oddRank → dominant on LEFT; odd oddRank → dominant on RIGHT
-  const oddRank = (n - 3) / 2;
-  const dominantOnLeft = (oddRank % 2 === 0);
-
-  const rest = n - 1; // the remaining even count of tiles
-  const restCols = Math.ceil(Math.sqrt(rest));
-  const restRows = Math.ceil(rest / restCols);
-
-  const totalCols = 1 + restCols;
-  const totalRows = restRows;
-
-  const placements = [];
-
-  if (dominantOnLeft) {
-    // Dominant tile: column 1, spans all rows
-    placements.push({ colStart: 1, rowStart: 1, colSpan: 1, rowSpan: totalRows });
-    // Rest tiles: columns 2..totalCols, row by row
-    for (let i = 0; i < rest; i++) {
-      const row = Math.floor(i / restCols);
-      const col = i % restCols;
-      placements.push({
-        colStart: 2 + col,
-        rowStart: 1 + row,
-        colSpan: 1,
-        rowSpan: 1
-      });
-    }
-  } else {
-    // Dominant tile first in placements (projectIndex=0), placed at last column
-    placements.push({ colStart: totalCols, rowStart: 1, colSpan: 1, rowSpan: totalRows, projIdx: 0 });
-    // Rest tiles: columns 1..restCols, row by row (projects 1..n-1)
-    for (let i = 0; i < rest; i++) {
-      const row = Math.floor(i / restCols);
-      const col = i % restCols;
-      placements.push({
-        colStart: 1 + col,
-        rowStart: 1 + row,
-        colSpan: 1,
-        rowSpan: 1,
-        projIdx: 1 + i
-      });
-    }
-  }
-
-  return { cols: totalCols, rows: totalRows, placements };
-}
-
-// ─────────────────────────────────────────────
-//  SIZE CLASSIFICATION
-// ─────────────────────────────────────────────
-function getTileSize(tileEl) {
-  const w = tileEl.offsetWidth;
-  const h = tileEl.offsetHeight;
-  if (w < 60 || h < 50) return 'micro';
-  if (w < 110 || h < 80) return 'tiny';
-  if (w < 180 || h < 120) return 'small';
-  if (w < 300 || h < 180) return 'medium';
-  return 'large';
-}
-
-// ─────────────────────────────────────────────
-//  RENDER
-// ─────────────────────────────────────────────
-const grid = document.getElementById('grid');
-const overlay = document.getElementById('overlay');
-const scrim = document.getElementById('scrim');
-const expTile = document.getElementById('expanded-tile');
-const pagenav = document.getElementById('pagenav');
-const pageDots = document.getElementById('page-dots');
-const tileCountLabel = document.getElementById('tile-count-label');
-const pageIndicator = document.getElementById('page-indicator');
-
-function renderGrid() {
-  const projects = pageProjects();
-  const n = projects.length;
-
-  // Update status bar
-  tileCountLabel.textContent = `${PROJECTS.length} project${PROJECTS.length !== 1 ? 's' : ''}`;
-  pageIndicator.textContent = `pg ${currentPage + 1}`;
-
-  // Grid template
-  const layout = computeLayout(n);
-  if (!layout) {
-    grid.innerHTML = '';
-    grid.style.gridTemplateColumns = '';
-    grid.style.gridTemplateRows = '';
-    return;
-  }
-
-  grid.style.gridTemplateColumns = `repeat(${layout.cols}, 1fr)`;
-  grid.style.gridTemplateRows = `repeat(${layout.rows}, 1fr)`;
-
-  // Clear
-  grid.innerHTML = '';
-
-  // placements are ordered by DOM insertion; each carries projIdx
-  // (defaults to its position for even/left-dominant layouts)
-  layout.placements.forEach((p, i) => {
-    const projIdx = (p.projIdx !== undefined) ? p.projIdx : i;
-    const proj = projects[projIdx];
-    if (!proj) return;
-    const accent = proj.accent || ACCENTMAP[projIdx % ACCENTMAP.length];
-    const div = document.createElement('div');
-    div.className = 'tile';
-    div.dataset.index = projIdx;
-    div.style.setProperty('--tile-accent', accent);
-
-    // Apply explicit grid placement
-    if (p.colStart !== 'auto') {
-      div.style.gridColumn = `${p.colStart} / span ${p.colSpan}`;
-      div.style.gridRow    = `${p.rowStart} / span ${p.rowSpan}`;
-    }
-
-    div.innerHTML = `
-      <div class="tile-inner">
-        <div class="tile-initials">${getInitials(proj.title)}</div>
-        <div class="tile-title">${proj.title}</div>
-        <div class="tile-desc">${proj.description}</div>
-        <div class="tile-tags">${(proj.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-        ${(proj.links||[]).map(l=>`<a class="tile-link" href="${l.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${l.label}</a>`).join('')}
-      </div>
-    `;
-
-    div.addEventListener('click', (e) => {
-      e.stopPropagation();
-      handleTileClick(projIdx, div, accent);
-    });
-
-    grid.appendChild(div);
-  });
-
-  // Apply size classes after layout
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.tile').forEach(t => {
-      t.dataset.size = getTileSize(t);
-    });
-    fitTitles();
-  });
-
-  // Page nav
-  updatePageNav();
-}
-
-// ─────────────────────────────────────────────
-//  AUTOFIT TITLES JS
-// ─────────────────────────────────────────────
-function fitTitles() {
-  document.querySelectorAll('.tile-inner').forEach(inner => {
-    const title = inner.querySelector('.tile-title');
-    if (!title) return;
-    
-    // reset to a large baseline
-    let fontSize = 60;
-    title.style.fontSize = fontSize + 'px';
-    
-    const minSize = 10;
-    while ((inner.scrollHeight > inner.clientHeight || inner.scrollWidth > inner.clientWidth) && fontSize > minSize) {
-      fontSize -= 1;
-      title.style.fontSize = fontSize + 'px';
-    }
-  });
-}
-
-// ─────────────────────────────────────────────
-//  PAGE NAV
-// ─────────────────────────────────────────────
-function updatePageNav() {
-  const tp = totalPages();
-  if (tp <= 1) {
-    pagenav.classList.remove('visible');
-    return;
-  }
-  pagenav.classList.add('visible');
-
-  pageDots.innerHTML = '';
-  for (let i = 0; i < tp; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'page-dot' + (i === currentPage ? ' active' : '');
-    dot.addEventListener('click', () => goToPage(i));
-    pageDots.appendChild(dot);
-  }
-}
-
-function goToPage(p) {
-  currentPage = Math.max(0, Math.min(p, totalPages() - 1));
-  collapseExpanded(false);
-  renderGrid();
-}
-
-document.getElementById('btn-prev').addEventListener('click', () => goToPage(currentPage - 1));
-document.getElementById('btn-next').addEventListener('click', () => goToPage(currentPage + 1));
-
-// ─────────────────────────────────────────────
-//  EXPAND / COLLAPSE
-// ─────────────────────────────────────────────
-function handleTileClick(localIdx, tileEl, accent) {
-  if (isAnimating) return;
-  const projects = pageProjects();
-  if (projects.length <= 1) return; // single tile = already full, no expand needed
-
-  if (expandedIdx === localIdx) {
-    collapseExpanded(true);
-    return;
-  }
-
-  expandTile(localIdx, tileEl, accent);
-}
-
-function expandTile(localIdx, tileEl, accent) {
-  isAnimating = true;
-  expandedIdx = localIdx;
-
-  const proj = pageProjects()[localIdx];
-  const vp = document.getElementById('viewport');
-  const vpRect = vp.getBoundingClientRect();
-  const tRect = tileEl.getBoundingClientRect();
-
-  // Set accent color
-  expTile.style.setProperty('--tile-accent', accent);
-
-  // Populate content
-  expTile.innerHTML = `
-    <div class="exp-header">
-      <div class="exp-title">${proj.title}</div>
-      <div class="exp-close-hint">click to close</div>
     </div>
-    <div class="exp-body">
-      ${proj.image ? `<img src="${proj.image}" alt="${proj.title}" style="width: 100%; max-height: 350px; object-fit: cover; border-radius: var(--radius); margin-bottom: 8px;" />` : ''}
-      <div class="exp-desc">${proj.description}</div>
-      ${proj.links?.length ? `<div class="exp-links">${proj.links.map(l=>`<a href="${l.url}" target="_blank" rel="noopener" style="color: var(--tile-accent, var(--accent)); text-decoration: underline;">${l.label}</a>`).join('')}</div>` : ''}
-      ${proj.tags?.length ? `<div class="exp-tags">${proj.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : ''}
-      ${proj.content ? `<div class="exp-content">${proj.content}</div>` : ''}
+  </nav>
+
+  <main>
+    <!-- ═══ HERO ═══ -->
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <div class="hero-label">Portfolio</div>
+        <h1 class="hero-name">Your Name</h1>
+        <p class="hero-title">Cybersecurity Enthusiast &amp; Developer</p>
+        <div class="hero-socials"></div>
+      </div>
+      <div class="scroll-indicator" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ═══ ABOUT ═══ -->
+    <section id="about">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Get to know me</span>
+          <h2 class="section-title">About</h2>
+        </div>
+        <div class="about-content">
+          <div class="about-text reveal"></div>
+          <div class="skills-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PROJECTS ═══ -->
+    <section id="projects">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">What I've built</span>
+          <h2 class="section-title">Projects</h2>
+        </div>
+        <div class="filter-bar reveal"></div>
+        <div class="projects-grid"></div>
+      </div>
+    </section>
+
+    <!-- ═══ WRITEUPS ═══ -->
+    <section id="writeups">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">CTF & Analysis</span>
+          <h2 class="section-title">Writeups</h2>
+        </div>
+        <div class="writeups-pinned"></div>
+        <div class="writeups-list"></div>
+        <button class="writeups-show-more" style="display: none;">Show more</button>
+      </div>
+    </section>
+
+    <!-- ═══ ACHIEVEMENTS ═══ -->
+    <section id="achievements">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Recognition</span>
+          <h2 class="section-title">Achievements</h2>
+        </div>
+        <div class="achievements-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══ FOOTER / CONTACT ═══ -->
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer-content">
+        <span class="footer-label">Get in touch</span>
+        <h2 class="footer-title">Contact</h2>
+        <p class="footer-subtitle">Interested in working together or just want to connect? Feel free to reach out.</p>
+        <div class="footer-socials"></div>
+        <div class="footer-divider"></div>
+        <p class="footer-copy"></p>
+      </div>
     </div>
-  `;
+  </footer>
 
-  // Start from tile position (relative to viewport)
-  const startTop = tRect.top - vpRect.top;
-  const startLeft = tRect.left - vpRect.left;
-  const startW = tRect.width;
-  const startH = tRect.height;
-
-  // Disable transition for snap start
-  expTile.style.transition = 'none';
-  expTile.style.top = startTop + 'px';
-  expTile.style.left = startLeft + 'px';
-  expTile.style.width = startW + 'px';
-  expTile.style.height = startH + 'px';
-  expTile.style.opacity = '0';
-
-  overlay.classList.add('active');
-  scrim.classList.add('active');
-  document.getElementById('esc-hint').classList.add('visible');
-
-  // Force reflow
-  expTile.offsetHeight;
-
-  // Restore transition and animate to full viewport
-  const padding = 20;
-  expTile.style.transition = '';
-  expTile.style.top = padding + 'px';
-  expTile.style.left = padding + 'px';
-  expTile.style.width = (vpRect.width - padding * 2) + 'px';
-  expTile.style.height = (vpRect.height - padding * 2) + 'px';
-  expTile.style.opacity = '1';
-
-  // Add click to close on the expanded tile header area
-  expTile.addEventListener('click', onExpandedClick);
-
-  setTimeout(() => { isAnimating = false; }, 420);
-}
-
-function onExpandedClick(e) {
-  // Only close if clicking the tile itself or header, not scrollable body content
-  const body = expTile.querySelector('.exp-body');
-  if (body && body.contains(e.target)) {
-    // Allow scrolling & link clicks inside body; don't close
-    if (e.target.tagName === 'A') return;
-    // Check if the body is scrollable and the click was inside — let scroll happen but also close on intent
-    // We close only if clicking the header or the padding area of exp-tile directly
-    return;
-  }
-  collapseExpanded(true);
-}
-
-function collapseExpanded(animate) {
-  if (!overlay.classList.contains('active')) return;
-  isAnimating = true;
-
-  expTile.removeEventListener('click', onExpandedClick);
-  scrim.classList.remove('active');
-  document.getElementById('esc-hint').classList.remove('visible');
-
-  if (animate && expandedIdx !== null) {
-    const tileEl = document.querySelector(`.tile[data-index="${expandedIdx}"]`);
-    const vp = document.getElementById('viewport');
-    if (tileEl && vp) {
-      const vpRect = vp.getBoundingClientRect();
-      const tRect = tileEl.getBoundingClientRect();
-      expTile.style.top = (tRect.top - vpRect.top) + 'px';
-      expTile.style.left = (tRect.left - vpRect.left) + 'px';
-      expTile.style.width = tRect.width + 'px';
-      expTile.style.height = tRect.height + 'px';
-      expTile.style.opacity = '0';
-    }
-  } else {
-    expTile.style.opacity = '0';
-  }
-
-  setTimeout(() => {
-    overlay.classList.remove('active');
-    expandedIdx = null;
-    isAnimating = false;
-  }, 400);
-}
-
-
-// ESC key to collapse
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && overlay.classList.contains('active')) {
-    collapseExpanded(true);
-  }
-});
-
-// Close on scrim click
-scrim.addEventListener('click', () => collapseExpanded(true));
-
-// ─────────────────────────────────────────────
-//  RESIZE OBSERVER — update size classes
-// ─────────────────────────────────────────────
-const ro = new ResizeObserver(() => {
-  document.querySelectorAll('.tile').forEach(t => {
-    t.dataset.size = getTileSize(t);
-  });
-  fitTitles();
-
-  // Also reposition expanded tile if open
-  if (overlay.classList.contains('active')) {
-    const vp = document.getElementById('viewport');
-    const vpRect = vp.getBoundingClientRect();
-    const padding = 20;
-    expTile.style.transition = 'none';
-    expTile.style.top = padding + 'px';
-    expTile.style.left = padding + 'px';
-    expTile.style.width = (vpRect.width - padding * 2) + 'px';
-    expTile.style.height = (vpRect.height - padding * 2) + 'px';
-    expTile.offsetHeight;
-    expTile.style.transition = '';
-  }
-});
-ro.observe(document.getElementById('viewport'));
-
-// ─────────────────────────────────────────────
-//  INIT
-// ─────────────────────────────────────────────
-renderGrid();
-</script>
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
