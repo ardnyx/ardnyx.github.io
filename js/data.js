@@ -8,7 +8,7 @@
 
 // ── SITE INFO (fill in your personal details) ────────────────
 const SITE = {
-  name: "Your Name",                   // ← Your display name
+  name: "Dann Leyesa",                   // ← Your display name
   title: "Cybersecurity Enthusiast & Developer",  // ← Tagline
   bio: `A brief paragraph about yourself, your interests, and what drives you. 
         Mention your focus areas — cybersecurity, reverse engineering, 
@@ -16,7 +16,7 @@ const SITE = {
   // Social / contact links — leave url empty or remove to hide
   socials: [
     { platform: "github",   url: "https://github.com/ardnyx",  label: "GitHub" },
-    { platform: "linkedin", url: "",                            label: "LinkedIn" },
+    { platform: "linkedin", url: "https://www.linkedin.com/in/dann-leyesa-1a01b8280/",                            label: "LinkedIn" },
     { platform: "email",    url: "",                            label: "Email" },
     // Add more: { platform: "twitter", url: "...", label: "Twitter" },
   ],
