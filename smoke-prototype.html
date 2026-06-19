@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Writeup hover FX — vignette only (three.js cloud) v3</title>
+<style>
+  :root{
+    --bg:#FAF7F2; --ink:#2A1F2D; --ink-muted:#6B5F70;
+    --primary:#6B3F7A; --secondary:#B98AC9; --rule-solid:#E0D4E7;
+    --mono:'SFMono-Regular',ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:ui-sans-serif,system-ui,'Segoe UI',sans-serif; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:780px; margin:0 auto; padding:4rem 1.5rem 6rem; position:relative; z-index:1;}
+  .hint{font-family:var(--mono); font-size:.72rem; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--secondary); margin:0 0 .35rem;}
+  .lead{color:var(--ink-muted); margin:0 0 2.5rem; font-size:.95rem; line-height:1.6;}
+  .section-label{font-family:var(--mono); font-size:.72rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--secondary); margin:0 0 .5rem;}
+  .list{border-top:1px solid var(--rule-solid);}
+
+  .row{position:relative; border-bottom:1px solid var(--rule-solid);}
+  .row__inner{padding:1.4rem .25rem; display:flex; flex-direction:column; gap:.55rem;}
+  .meta-top{display:flex; align-items:center; gap:.7rem; flex-wrap:wrap;}
+  .badge{font-family:var(--mono); font-size:.66rem; letter-spacing:.06em;
+    padding:.15rem .55rem; border-radius:6px; background:#efe6f1; color:var(--primary);}
+  .event{font-family:var(--mono); font-size:.7rem; color:var(--ink-muted); letter-spacing:.05em;}
+  .diff{font-family:var(--mono); font-size:.7rem; font-weight:600; letter-spacing:.09em;
+    text-transform:uppercase; margin-left:auto;}
+  .diff[data-d="easy"]{color:#2d6a4f;}
+  .diff[data-d="medium"]{color:#b46b00;}
+  .diff[data-d="hard"]{color:#9b2335;}
+  .diff[data-d="insane"]{color:#7a2db4;}
+  .title{font-size:1.3rem; font-weight:600; line-height:1.2; margin:0;}
+  .title a{color:var(--ink); text-decoration:none;}
+  .desc{font-size:.9rem; color:var(--ink-muted); line-height:1.6; margin:0;}
+  .meta-bottom{font-family:var(--mono); font-size:.7rem; color:var(--ink-muted);
+    letter-spacing:.04em; display:flex; gap:.5rem;}
+  .meta-bottom .t{color:var(--secondary);}
+  .tags{display:flex; gap:.35rem; flex-wrap:wrap; margin-top:.2rem;}
+  .tag{font-family:var(--mono); font-size:.64rem; color:var(--ink-muted);
+    border:1px solid var(--rule-solid); border-radius:5px; padding:.1rem .45rem;}
+
+  #fx{position:fixed; inset:0; z-index:40; pointer-events:none;}
+  .note{margin-top:1.25rem; color:#9b2335; font-size:.8rem; min-height:1em;}
+
+  /* insane text corruption + shine (applied per character via JS) */
+  .ch{display:inline;}
+  .ch.corrupt{color:#d8362a; text-shadow:0 0 7px rgba(216,54,42,0.85);}
+  .ch.shine{color:#ffe7a0;
+    text-shadow:0 0 8px rgba(255,205,110,0.95), 0 0 17px rgba(255,170,70,0.55);
+    animation:shinepulse .6s ease;}
+  @keyframes shinepulse{0%{filter:brightness(1);}35%{filter:brightness(2.4);}100%{filter:brightness(1);}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="hint">prototype v3 · cloud vignette only · irregular + windy insane</p>
+    <p class="lead">Hover rows with a mouse/trackpad. The cloud follows your cursor, the clear pocket is
+      irregular and wisps drift through it. Medium = gold, hard = red, insane = blackish-red with a tight
+      pocket, solid dark edges, and random wind gusts. Easy = nothing.</p>
+
+    <p class="section-label">Featured writeups</p>
+    <div class="list" id="list">
+      <article class="row" data-diff="easy">
+        <div class="row__inner">
+          <div class="meta-top"><span class="badge">CTF</span><span class="event">picoCTF</span>
+            <span class="diff" data-d="easy">easy</span></div>
+          <h3 class="title"><a href="#">Pico CTF: Warmup Stroll</a></h3>
+          <p class="desc">A gentle starter — strings and one obvious branch. Nothing happens on hover, by design.</p>
+          <div class="meta-bottom"><span>May 2, 2026</span><span>·</span><span class="t">3 min read</span></div>
+          <div class="tags"><span class="tag">c</span><span class="tag">strings</span></div>
+        </div>
+      </article>
+      <article class="row" data-diff="medium">
+        <div class="row__inner">
+          <div class="meta-top"><span class="badge">CTF</span><span class="event">picoCTF</span>
+            <span class="diff" data-d="medium">medium</span></div>
+          <h3 class="title"><a href="#">Pico CTF: WinAntiDbg0x100</a></h3>
+          <p class="desc">Bypassing anti-debugging by inverting the jump instructions to reach the flag path.</p>
+          <div class="meta-bottom"><span>May 5, 2026</span><span>·</span><span class="t">5 min read</span></div>
+          <div class="tags"><span class="tag">x86-64 asm</span><span class="tag">anti-debugging</span></div>
+        </div>
+      </article>
+      <article class="row" data-diff="hard">
+        <div class="row__inner">
+          <div class="meta-top"><span class="badge">CTF</span><span class="event">picoCTF</span>
+            <span class="diff" data-d="hard">hard</span></div>
+          <h3 class="title"><a href="#">Pico CTF: Gatekeeper</a></h3>
+          <p class="desc">Reversing a hex-gated password and deobfuscating a flag ciphered by a C routine.</p>
+          <div class="meta-bottom"><span>Oct 5, 2026</span><span>·</span><span class="t">9 min read</span></div>
+          <div class="tags"><span class="tag">hex-puzzle</span><span class="tag">reversing</span></div>
+        </div>
+      </article>
+      <article class="row" data-diff="insane">
+        <div class="row__inner">
+          <div class="meta-top"><span class="badge">Malware Analysis</span><span class="event">sample</span>
+            <span class="diff" data-d="insane">insane</span></div>
+          <h3 class="title"><a href="#">Unpacking a Themida-wrapped loader</a></h3>
+          <p class="desc">Full manual unpack, anti-VM defeat, and IAT rebuild on a heavily virtualized binary.</p>
+          <div class="meta-bottom"><span>Dec 1, 2026</span><span>·</span><span class="t">22 min read</span></div>
+          <div class="tags"><span class="tag">unpacking</span><span class="tag">vm-bench</span></div>
+        </div>
+      </article>
+    </div>
+    <p class="note" id="note"></p>
+  </div>
+
+  <canvas id="fx"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var note = document.getElementById('note');
+  var canvas = document.getElementById('fx');
+
+  if(typeof THREE === 'undefined'){ note.textContent='three.js failed to load (offline?). Effect disabled.'; return; }
+  if(!canHover){ note.textContent='This device has no fine hover pointer — the effect is desktop-only.'; return; }
+
+  var FX = {
+    medium:{ tint:[1.00,0.72,0.30], dark:[0.055,0.040,0.050], veil:0.52, tintAmt:0.60, hint:0.00,
+             inner:45, outer:640, core:0.00, floor:0.30, through:0.30, irr:0.13, gusty:false },
+    hard:  { tint:[0.88,0.20,0.12], dark:[0.055,0.022,0.024], veil:0.78, tintAmt:0.62, hint:0.05,
+             inner:40, outer:560, core:0.07, floor:0.46, through:0.36, irr:0.18, gusty:false },
+    insane:{ tint:[0.40,0.055,0.05], dark:[0.016,0.007,0.010], veil:1.00, tintAmt:0.55, hint:0.12,
+             inner:30, outer:500, core:0.17, floor:0.90, through:0.60, irr:0.27, gusty:true }
+  };
+
+  var frag = [
+    'precision highp float;',
+    'uniform vec2 uRes; uniform vec2 uMouse; uniform float uPhase; uniform float uWind;',
+    'uniform float uActive; uniform float uVeil; uniform float uTintAmt; uniform float uHint;',
+    'uniform float uInner; uniform float uOuter; uniform float uCore; uniform float uFloor; uniform float uThrough; uniform float uIrr;',
+    'uniform vec3 uTint; uniform vec3 uDark;',
+    'float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }',
+    'float noise(vec2 p){ vec2 i=floor(p),f=fract(p);',
+    '  float a=hash(i),b=hash(i+vec2(1.,0.)),c=hash(i+vec2(0.,1.)),d=hash(i+vec2(1.,1.));',
+    '  vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y); }',
+    'float fbm(vec2 p){ float v=0.,a=0.5; for(int i=0;i<5;i++){ v+=a*noise(p); p*=2.02; a*=0.5; } return v; }',
+    'void main(){',
+    '  vec2 uv = gl_FragCoord.xy/uRes;',
+    '  vec2 muv = vec2(uMouse.x, uRes.y-uMouse.y)/uRes;',
+    '  float aspect = uRes.x/uRes.y;',
+    '  float dist = length(vec2((uv.x-muv.x)*aspect, uv.y-muv.y));',
+    '  float t = uPhase;',
+    '  vec2 p = vec2(uv.x*aspect, uv.y)*3.0;',
+    '  float warp = fbm(p*0.6 - vec2(t*0.7, t));',
+    '  float warp2 = fbm(p*1.5 + vec2(-t*1.4, t*0.9));',
+    '  float cloud = fbm(p + vec2(t, t*0.5) + warp*(0.7 + uWind*0.6) + warp2*(0.25 + uWind*0.4));',
+    '  cloud = clamp(cloud, 0.0, 1.0);',
+    '  float edge = dist + (warp-0.5)*uIrr + (warp2-0.5)*uIrr*0.6;',
+    '  float ramp = smoothstep(uInner/uRes.y, uOuter/uRes.y, edge);',
+    '  float vig = mix(uCore, 1.0, ramp);',
+    '  float through = (1.0-ramp) * smoothstep(0.48,0.92,cloud) * uThrough * (0.7 + uWind*0.6);',
+    '  vec3 col = mix(uDark, uTint, cloud*uTintAmt);',
+    '  col = mix(col, vec3(1.0,0.82,0.32), smoothstep(0.74,1.0,cloud)*uHint);',
+    '  float dens = uFloor + (1.0-uFloor)*cloud;',
+    '  float alpha = uActive * uVeil * (vig*dens + through);',
+    '  gl_FragColor = vec4(col, clamp(alpha,0.0,1.0));',
+    '}'
+  ].join('\n');
+
+  var vert = 'void main(){ gl_Position = vec4(position.xy,0.0,1.0); }';
+
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+  var scene = new THREE.Scene();
+  var camera = new THREE.Camera();
+
+  var U = {
+    uRes:{value:new THREE.Vector2()}, uMouse:{value:new THREE.Vector2(-9999,-9999)},
+    uPhase:{value:0}, uWind:{value:1},
+    uActive:{value:0}, uVeil:{value:0.6}, uTintAmt:{value:0.6}, uHint:{value:0},
+    uInner:{value:150}, uOuter:{value:620}, uCore:{value:0}, uFloor:{value:0.3}, uThrough:{value:0.22}, uIrr:{value:0.12},
+    uTint:{value:new THREE.Color(1,0.72,0.3)}, uDark:{value:new THREE.Color(0.05,0.04,0.05)}
+  };
+  var mat = new THREE.ShaderMaterial({uniforms:U, vertexShader:vert, fragmentShader:frag, transparent:true});
+  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat));
+
+  function resize(){
+    var w=window.innerWidth, h=window.innerHeight;
+    renderer.setSize(w,h,false);
+    U.uRes.value.set(w*renderer.getPixelRatio(), h*renderer.getPixelRatio());
+  }
+  window.addEventListener('resize', resize); resize();
+
+  var tgtMouse={x:-9999,y:-9999};
+  var tgt={active:0, veil:0.6, tintAmt:0.6, hint:0, inner:150, outer:620, core:0, floor:0.3, through:0.22, irr:0.12,
+           tint:new THREE.Color(1,0.72,0.3), dark:new THREE.Color(0.05,0.04,0.05)};
+  var gusty=false;
+
+  function setDiff(d){
+    var f=FX[d]; if(!f) return;
+    tgt.tint.setRGB(f.tint[0],f.tint[1],f.tint[2]);
+    tgt.dark.setRGB(f.dark[0],f.dark[1],f.dark[2]);
+    tgt.veil=f.veil; tgt.tintAmt=f.tintAmt; tgt.hint=f.hint;
+    tgt.inner=f.inner; tgt.outer=f.outer; tgt.core=f.core; tgt.floor=f.floor; tgt.through=f.through; tgt.irr=f.irr;
+    gusty=f.gusty;
+  }
+
+  document.addEventListener('mousemove', function(e){
+    tgtMouse.x=e.clientX*renderer.getPixelRatio();
+    tgtMouse.y=e.clientY*renderer.getPixelRatio();
+  });
+  /* ── insane text corruption + shine ── */
+  var GLYPHS = '日ﾊﾐﾋｰｳｼﾅﾓﾆﾔﾇﾈ012789#%&$@/<>*+=≡≠█▓░'.split('');
+  function randGlyph(){ return GLYPHS[(Math.random()*GLYPHS.length)|0]; }
+
+  function wrapChars(el){
+    if(el.dataset.wrapped) return;
+    var text=el.textContent; el.textContent=''; el.dataset.wrapped='1';
+    for(var i=0;i<text.length;i++){
+      var s=document.createElement('span');
+      s.className='ch'; s.textContent=text[i]; s.dataset.ch=text[i];
+      el.appendChild(s);
+    }
+  }
+  function unwrapChars(el){
+    if(!el.dataset.wrapped) return;
+    var t=''; el.querySelectorAll('.ch').forEach(function(s){ t+=s.dataset.ch; });
+    el.textContent=t; delete el.dataset.wrapped;
+  }
+
+  var corruptTimer=null, corruptEls=null;
+  function corruptChar(s){
+    if(s.dataset.busy) return; s.dataset.busy='1'; s.classList.add('corrupt');
+    var flips=2+((Math.random()*3)|0), fi=0;
+    var iv=setInterval(function(){
+      s.textContent=randGlyph();
+      if(++fi>=flips){ clearInterval(iv);
+        setTimeout(function(){ s.textContent=s.dataset.ch; s.classList.remove('corrupt'); delete s.dataset.busy; },
+          70+Math.random()*140);
+      }
+    }, 55);
+  }
+  function shineChar(s){ s.classList.add('shine'); setTimeout(function(){ s.classList.remove('shine'); }, 620); }
+
+  function startCorruption(row){
+    stopCorruption();
+    corruptEls=[row.querySelector('.title a'), row.querySelector('.desc')].filter(Boolean);
+    corruptEls.forEach(wrapChars);
+    var chars=[];
+    corruptEls.forEach(function(el){ el.querySelectorAll('.ch').forEach(function(s){ if(s.dataset.ch!==' ') chars.push(s); }); });
+    if(!chars.length) return;
+    corruptTimer=setInterval(function(){
+      var n=1+((Math.random()*2)|0);
+      for(var i=0;i<n;i++){ if(Math.random()<0.9) corruptChar(chars[(Math.random()*chars.length)|0]); }
+      if(Math.random()<0.55) shineChar(chars[(Math.random()*chars.length)|0]);
+    }, 130);
+  }
+  function stopCorruption(){
+    if(corruptTimer){ clearInterval(corruptTimer); corruptTimer=null; }
+    if(corruptEls){ corruptEls.forEach(function(el){
+      el.querySelectorAll('.ch').forEach(function(s){ s.textContent=s.dataset.ch; s.className='ch'; delete s.dataset.busy; });
+      unwrapChars(el);
+    }); corruptEls=null; }
+  }
+
+  document.querySelectorAll('.row').forEach(function(row){
+    row.addEventListener('mouseenter', function(){
+      var d=row.getAttribute('data-diff');
+      stopCorruption();
+      if(d==='easy'){ tgt.active=0; return; }
+      setDiff(d); tgt.active=1;
+      if(d==='insane') startCorruption(row);
+    });
+  });
+  document.getElementById('list').addEventListener('mouseleave', function(){ tgt.active=0; stopCorruption(); });
+
+  function k(dt,tau){ return 1-Math.exp(-dt/tau); }
+
+  /* wind: random gusts (chill ↔ ~20 ↔ ~30kph) drive drift speed + turbulence */
+  var windPhase=0, wind=1, windTarget=1, windTimer=0;
+  function stepWind(dt){
+    windTimer-=dt;
+    if(windTimer<=0){
+      windTimer = 1.4 + Math.random()*3.4;
+      if(gusty){
+        windTarget = (Math.random()<0.32) ? 0.20+Math.random()*0.30 : 0.9+Math.random()*2.2;
+      } else {
+        windTarget = 0.85 + Math.random()*0.4;
+      }
+    }
+    wind += (windTarget-wind)*k(dt,0.9);
+    windPhase += dt*wind*0.03;
+  }
+
+  var last=performance.now();
+  function loop(now){
+    var dt=(now-last)/1000; if(dt>0.1)dt=0.1; last=now;
+    stepWind(dt);
+
+    var km=k(dt,0.10), kc=k(dt,0.45), ka=k(dt,0.50);
+    if(U.uMouse.value.x<-9000){ U.uMouse.value.set(tgtMouse.x,tgtMouse.y); }
+    U.uMouse.value.x += (tgtMouse.x-U.uMouse.value.x)*km;
+    U.uMouse.value.y += (tgtMouse.y-U.uMouse.value.y)*km;
+
+    U.uPhase.value = windPhase;
+    U.uWind.value  += (wind-U.uWind.value)*k(dt,0.6);
+    U.uActive.value += (tgt.active-U.uActive.value)*ka;
+    U.uVeil.value   += (tgt.veil-U.uVeil.value)*kc;
+    U.uTintAmt.value+= (tgt.tintAmt-U.uTintAmt.value)*kc;
+    U.uHint.value   += (tgt.hint-U.uHint.value)*kc;
+    U.uInner.value  += (tgt.inner-U.uInner.value)*kc;
+    U.uOuter.value  += (tgt.outer-U.uOuter.value)*kc;
+    U.uCore.value   += (tgt.core-U.uCore.value)*kc;
+    U.uFloor.value  += (tgt.floor-U.uFloor.value)*kc;
+    U.uThrough.value+= (tgt.through-U.uThrough.value)*kc;
+    U.uIrr.value    += (tgt.irr-U.uIrr.value)*kc;
+    U.uTint.value.lerp(tgt.tint, kc);
+    U.uDark.value.lerp(tgt.dark, kc);
+
+    renderer.render(scene,camera);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
