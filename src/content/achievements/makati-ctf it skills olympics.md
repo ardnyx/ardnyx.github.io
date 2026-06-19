@@ -11,4 +11,4 @@ link: "https://www.facebook.com/share/p/1G2Dsz77Jr/"
 ## Overview
 My first CTF participation, unexpectedly ended at 3rd place despite the memorization-heavy nature of this competition which restricted the use of researching online. 
 
-![image](/public/images/makati_ctf.png)
+![image](/images/makati_ctf.png)
