@@ -4,7 +4,7 @@ description: "Bypassing and reversing a flag hidden by a password that accepts h
 date: 2026-10-05
 category: ctf
 tags: ["c", "x86-64 asm", "hex-puzzle"]
-difficulty: insane
+difficulty: medium
 event: "picoCTF"
 featured: true
 ---
