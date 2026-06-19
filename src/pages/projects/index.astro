@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+const sorted = projects.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Projects — ardnyx" description="A collection of tools, research projects, and experiments.">
+  <div class="container">
+    <header class="page-header">
+      <p class="section-label">Work</p>
+      <h1>Projects</h1>
+      <p>A docuemntation of various tools, experiments, projects, that I did either for fun and for academic requirements.</p>
+    </header>
+
+    {sorted.length > 0 ? (
+      <div class="grid--projects">
+        {sorted.map(project => <ProjectCard project={project} />)}
+      </div>
+    ) : (
+      <p class="empty">No projects yet — check back soon.</p>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+.empty {
+  color: var(--ink-muted);
+  font-style: italic;
+  padding: 3rem 0;
+}
+</style>

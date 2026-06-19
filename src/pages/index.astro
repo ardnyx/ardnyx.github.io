@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import WriteupCard from '../components/WriteupCard.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter(p => p.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const allWriteups = await getCollection('writeups');
+const recentWriteups = allWriteups
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 4);
+---
+
+<BaseLayout title="ardnyx — Security Research & CTF">
+
+  <!-- ── Hero ─────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <p class="hero__eyebrow">Computer Science | CTF | Cybersecurity | Systems Programming</p>
+      <h1 class="hero__title">
+        Dann Leyesa<span class="hero__comma"> , </span><br />
+        <em class="hero__sub-title">to achieve high</em>
+      </h1>
+      <p class="hero__body">
+        I write about CTF challenges, (soon) malware analysis, and other security research topics.
+        I also share my personal projects, achievements, and experiments, in this portfolio-blog site. Feel free to connect with me! 
+      </p>
+      <div class="hero__ctas">
+        <a href="/projects"     class="btn btn--primary">View Projects</a>
+        <a href="/writeups"     class="btn btn--ghost">Read Writeups</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Featured Projects ─────────────────────────────── -->
+  {featuredProjects.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <p class="section-label">Featured Work</p>
+        <div class="grid--projects">
+          {featuredProjects.map(project => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+        <a href="/projects" class="view-all">All projects →</a>
+      </div>
+    </section>
+  )}
+
+  <!-- ── Recent Writeups ───────────────────────────────── -->
+  {recentWriteups.length > 0 && (
+    <section class="section section--alt">
+      <div class="container">
+        <p class="section-label">Featured Writeups</p>
+        <div class="writeups-list">
+          {recentWriteups.map(writeup => (
+            <WriteupCard writeup={writeup} />
+          ))}
+        </div>
+        <a href="/writeups" class="view-all">All writeups →</a>
+      </div>
+    </section>
+  )}
+
+</BaseLayout>
+
+<style>
+/* ── Hero ───────────────────────────────────────────────── */
+.hero {
+  padding: 6rem 0 5rem;
+  border-bottom: 1px solid var(--rule-solid);
+}
+
+.hero__inner {
+  max-width: 780px;
+}
+
+.hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 1.5rem;
+}
+
+.hero__title {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.75rem;
+  color: var(--ink);
+}
+
+.hero__comma {
+  color: var(--primary);
+}
+
+.hero__sub-title {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--primary);
+  /* Fraunces italic has lovely optical characteristics at large sizes */
+  font-variation-settings: 'opsz' 144;
+}
+
+.hero__body {
+  font-size: var(--text-lg);
+  color: var(--ink-muted);
+  max-width: 58ch;
+  line-height: 1.7;
+  margin-bottom: 2.25rem;
+}
+
+.hero__ctas {
+  display: flex;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+}
+
+/* ── Writeups list ──────────────────────────────────────── */
+.writeups-list {
+  border-top: 1px solid var(--rule-solid);
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 3.5rem 0 3rem; }
+}
+</style>

@@ -1,0 +1,179 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WriteupCard from '../../components/WriteupCard.astro';
+import { getCollection } from 'astro:content';
+
+const writeups = await getCollection('writeups');
+const sorted = writeups.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Collect all unique tags across writeups
+const allTags = [...new Set(sorted.flatMap(w => w.data.tags))].sort();
+---
+
+<BaseLayout title="Writeups — ardnyx" description="CTF writeups and malware analysis notes.">
+  <div class="container">
+    <header class="page-header">
+      <p class="section-label">Research</p>
+      <h1>Writeups</h1>
+      <p>CTF challenge writeups and malware analysis notes. Useful for me to look back on; maybe useful for you too.</p>
+    </header>
+
+    <!-- Category filters -->
+    <div class="filters" role="group" aria-label="Filter by category">
+      <button class="tag tag--active" data-filter="all">All</button>
+      <button class="tag"            data-filter="ctf">CTF</button>
+      <button class="tag tag--malware" data-filter="malware">Malware</button>
+    </div>
+
+    <!-- Tag filters (only shown when tags exist) -->
+    {allTags.length > 0 && (
+      <div class="tag-filters" id="tag-filters">
+        <span class="tag-filters__label">Tags:</span>
+        {allTags.map(tag => (
+          <button class="tag" data-tag-filter={tag}>{tag}</button>
+        ))}
+        <button class="tag-filters__clear" id="clear-tags" style="display:none">
+          Clear tags ×
+        </button>
+      </div>
+    )}
+
+    <!-- Writeups list -->
+    {sorted.length > 0 ? (
+      <div class="writeups-list" id="writeups-list">
+        {sorted.map(writeup => <WriteupCard writeup={writeup} />)}
+      </div>
+    ) : (
+      <p class="empty">No writeups yet — check back soon.</p>
+    )}
+
+    <p class="no-results" id="no-results" style="display:none">
+      No writeups match the selected filters.
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.filters .tag {
+  cursor: pointer;
+  border: none;
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+.tag-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding: 0.875rem 1rem;
+  background: var(--surface);
+  border-radius: 4px;
+  border: 1px solid var(--rule-solid);
+}
+
+.tag-filters__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  letter-spacing: 0.06em;
+  margin-right: 0.25rem;
+}
+
+.tag-filters__clear {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--danger);
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  padding: 0;
+  margin-left: 0.5rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.writeups-list {
+  border-top: 1px solid var(--rule-solid);
+}
+
+.empty,
+.no-results {
+  color: var(--ink-muted);
+  font-style: italic;
+  padding: 3rem 0;
+}
+</style>
+
+<script>
+  // ── Category filter ────────────────────────────────────
+  const categoryBtns = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const tagBtns       = document.querySelectorAll<HTMLButtonElement>('[data-tag-filter]');
+  const cards         = document.querySelectorAll<HTMLElement>('[data-card]');
+  const noResults     = document.getElementById('no-results')!;
+  const clearBtn      = document.getElementById('clear-tags') as HTMLButtonElement | null;
+
+  let activeCategory = 'all';
+  let activeTag: string | null = null;
+
+  function applyFilters() {
+    let visible = 0;
+
+    cards.forEach(card => {
+      const cardCategory = card.dataset.category ?? '';
+      const cardTags     = (card.dataset.tags ?? '').split(',');
+
+      const categoryOk = activeCategory === 'all' || cardCategory === activeCategory;
+      const tagOk      = activeTag === null || cardTags.includes(activeTag);
+
+      if (categoryOk && tagOk) {
+        card.style.display = '';
+        visible++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    noResults.style.display = visible === 0 ? '' : 'none';
+    if (clearBtn) clearBtn.style.display = activeTag !== null ? '' : 'none';
+  }
+
+  categoryBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.filter ?? 'all';
+      categoryBtns.forEach(b => b.classList.remove('tag--active'));
+      btn.classList.add('tag--active');
+      applyFilters();
+    });
+  });
+
+  tagBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tag = btn.dataset.tagFilter ?? null;
+      if (activeTag === tag) {
+        // Deselect
+        activeTag = null;
+        tagBtns.forEach(b => b.classList.remove('tag--active'));
+      } else {
+        activeTag = tag;
+        tagBtns.forEach(b => b.classList.remove('tag--active'));
+        btn.classList.add('tag--active');
+      }
+      applyFilters();
+    });
+  });
+
+  clearBtn?.addEventListener('click', () => {
+    activeTag = null;
+    tagBtns.forEach(b => b.classList.remove('tag--active'));
+    applyFilters();
+  });
+</script>

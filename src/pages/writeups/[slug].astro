@@ -1,0 +1,39 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { getReadingTime } from '../../utils/reading-time';
+
+export async function getStaticPaths() {
+  const writeups = await getCollection('writeups');
+  return writeups.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'writeups'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const { title, description, date, category, tags, difficulty, event } = entry.data;
+const readingTime = getReadingTime(entry.body);
+---
+
+<PostLayout
+  title={title}
+  description={description}
+  date={date}
+  tags={tags}
+  readingTime={readingTime}
+  category={category}
+  difficulty={difficulty}
+  event={event}
+  backHref="/writeups"
+  backLabel="All writeups"
+>
+  <Content />
+</PostLayout>

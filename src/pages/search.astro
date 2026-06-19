@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Search — ardnyx" description="Search across all projects, writeups, and achievements.">
+  <div class="container">
+    <header class="page-header">
+      <p class="section-label">Search</p>
+      <h1>Search</h1>
+      <p>Search across all projects, writeups, and achievements.</p>
+    </header>
+
+    <div id="search"></div>
+
+    <p class="search-note" id="dev-note" style="display:none">
+      Search is only available in the built site. Run <code>npm run build</code> and
+      <code>npm run preview</code> to try it locally.
+    </p>
+  </div>
+</BaseLayout>
+
+<!-- Pagefind UI — generated after `npm run build` -->
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+<script src="/pagefind/pagefind-ui.js" is:inline></script>
+
+<style>
+  #search {
+    margin-bottom: 3rem;
+    max-width: 640px;
+  }
+
+  .search-note {
+    font-size: var(--text-sm);
+    color: var(--ink-muted);
+    background: var(--surface);
+    border: 1px solid var(--rule-solid);
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    max-width: 540px;
+  }
+
+  /* Pagefind theme overrides to match site palette */
+  :root {
+    --pagefind-ui-scale:        0.9;
+    --pagefind-ui-primary:      #6B3F7A;
+    --pagefind-ui-text:         #2A1F2D;
+    --pagefind-ui-background:   #FAF7F2;
+    --pagefind-ui-border:       #E0D4E7;
+    --pagefind-ui-tag:          #F2EBE3;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius:4px;
+    --pagefind-ui-image-border-radius: 4px;
+    --pagefind-ui-font:         'Inter', system-ui, sans-serif;
+  }
+</style>
+
+<script>
+  // Show dev notice when Pagefind isn't available
+  window.addEventListener('DOMContentLoaded', () => {
+    try {
+      // @ts-ignore — Pagefind is injected at build time
+      if (typeof PagefindUI !== 'undefined') {
+        // @ts-ignore
+        new PagefindUI({
+          element: '#search',
+          showSubResults: true,
+          showImages: false,
+        });
+      } else {
+        const note = document.getElementById('dev-note');
+        if (note) note.style.display = '';
+      }
+    } catch {
+      const note = document.getElementById('dev-note');
+      if (note) note.style.display = '';
+    }
+  });
+</script>

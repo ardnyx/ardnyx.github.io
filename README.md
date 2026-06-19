@@ -1,1 +1,0 @@
-# ardnyx.github.io

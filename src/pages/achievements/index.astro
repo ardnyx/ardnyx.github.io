@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AchievementCard from '../../components/AchievementCard.astro';
+import { getCollection } from 'astro:content';
+
+const achievements = await getCollection('achievements');
+const sorted = achievements.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const groups: Record<string, typeof sorted> = {
+  cert:        sorted.filter(a => a.data.type === 'cert'),
+  course:      sorted.filter(a => a.data.type === 'course'),
+  award:       sorted.filter(a => a.data.type === 'award'),
+  competition: sorted.filter(a => a.data.type === 'competition'),
+};
+
+const groupLabels: Record<string, string> = {
+  cert:        'Certifications',
+  course:      'Courses',
+  award:       'Awards',
+  competition: 'Competitions',
+};
+---
+
+<BaseLayout title="Achievements — ardnyx" description="Certifications, courses, awards, and competitions.">
+  <div class="container">
+    <header class="page-header">
+      <p class="section-label">Record</p>
+      <h1>Achievements</h1>
+      <p>Certifications, courses completed, and competitions entered.</p>
+    </header>
+
+    {achievements.length === 0 && (
+      <p class="empty">Nothing here yet.</p>
+    )}
+
+    {Object.entries(groups).map(([type, items]) =>
+      items.length > 0 && (
+        <section class="group">
+          <h2 class="group__title">{groupLabels[type]}</h2>
+          <div class="grid--achievements">
+            {items.map(achievement => (
+              <AchievementCard achievement={achievement} />
+            ))}
+          </div>
+        </section>
+      )
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+.group {
+  margin-bottom: 3.5rem;
+}
+
+.group__title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule-solid);
+  color: var(--ink-muted);
+}
+
+.empty {
+  color: var(--ink-muted);
+  font-style: italic;
+  padding: 3rem 0;
+}
+</style>

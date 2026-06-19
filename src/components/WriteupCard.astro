@@ -1,0 +1,161 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getReadingTime } from '../utils/reading-time';
+
+interface Props {
+  writeup: CollectionEntry<'writeups'>;
+}
+
+const { writeup } = Astro.props;
+const { title, description, date, category, tags, difficulty, event } = writeup.data;
+
+const readingTime = getReadingTime(writeup.body);
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'short', day: 'numeric',
+});
+
+const difficultyColor: Record<string, string> = {
+  easy:   '#2d6a4f',
+  medium: '#b46b00',
+  hard:   '#9b2335',
+  insane: '#4a1a6b',
+};
+---
+
+<article
+  class="writeup-card"
+  data-card
+  data-category={category}
+  data-tags={tags.join(',')}
+>
+  <div class="writeup-card__inner">
+    <div class="writeup-card__meta-top">
+      <span class={`tag tag--${category}`}>
+        {category === 'ctf' ? 'CTF' : 'Malware Analysis'}
+      </span>
+      {event && <span class="writeup-card__event">{event}</span>}
+      {difficulty && (
+        <span
+          class="writeup-card__difficulty"
+          style={`color: ${difficultyColor[difficulty] ?? 'inherit'}`}
+        >
+          {difficulty}
+        </span>
+      )}
+    </div>
+
+    <h3 class="writeup-card__title">
+      <a href={`/writeups/${writeup.slug}`}>{title}</a>
+    </h3>
+
+    <p class="writeup-card__desc">{description}</p>
+
+    <div class="writeup-card__meta-bottom">
+      <time datetime={date.toISOString()} class="writeup-card__date">{formattedDate}</time>
+      <span class="writeup-card__dot" aria-hidden="true">·</span>
+      <span class="writeup-card__time">{readingTime}</span>
+    </div>
+
+    {tags.length > 0 && (
+      <div class="writeup-card__tags">
+        {tags.map(t => <span class="tag">{t}</span>)}
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+.writeup-card {
+  border-bottom: 1px solid var(--rule-solid);
+  transition: background 0.15s ease;
+}
+
+.writeup-card:last-child {
+  border-bottom: none;
+}
+
+.writeup-card__inner {
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.writeup-card__meta-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.writeup-card__event {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  letter-spacing: 0.05em;
+}
+
+.writeup-card__difficulty {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.writeup-card__title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.writeup-card__title a {
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.writeup-card__title a:hover {
+  color: var(--primary);
+}
+
+.writeup-card__desc {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.writeup-card__meta-bottom {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.1rem;
+}
+
+.writeup-card__date,
+.writeup-card__time {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+}
+
+.writeup-card__time {
+  color: var(--secondary);
+}
+
+.writeup-card__dot {
+  color: var(--rule-solid);
+  font-size: 0.75rem;
+}
+
+.writeup-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+</style>
