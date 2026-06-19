@@ -16,7 +16,7 @@ Note: If one of the game modes load really slow, try restarting the page, loadin
 
 A custom-made classic tetris + 4 different complex gamemodes. Currently, the website is not available for mobile and it is not meant to be played in it (for now).
 
-![Tetris](/public/images/tetris.png)
+![Tetris](/images/tetris.png)
 
 ## Missing Features
 Hold
