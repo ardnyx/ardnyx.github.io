@@ -20,4 +20,8 @@ This "algorithm visualizer" which is built on Python (I know, gets pretty slow o
 4. Renders the frame with auto-assigned colors
 5. Without touching the source code itself.
 
-
+## Examples
+Some of the examples where bobo works best are given below:
+![tetromino](/images/bobo-gifs/rotate_tetromino.gif)
+![knight](/images/bobo-gifs/knight_tour.gif)
+![maze](/images/bobo-gifs/maze_generation.gif)
