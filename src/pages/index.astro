@@ -17,8 +17,29 @@ const recentWriteups = allWriteups
 
 // ── Achievements shown in the hero cycle ─────────────────────
 // Image + overview are parsed out of each achievement's markdown body.
+
+// HOW TO CUSTOMISE THE HERO ACHIEVEMENTS:
+//  • To hand-pick exactly which achievements show (and in what order), list
+//    their filenames (without the ".md") in HERO_ACHIEVEMENTS below, top = first.
+//  • Leave the array empty ([]) to instead auto-show the most recent ones,
+//    where HERO_CYCLE_COUNT controls how many.
+const HERO_ACHIEVEMENTS: string[] = [
+  'makati-ctf it skills olympics',
+  'jissa-ctf hack the beat',
+  'adu-ctf hackademic showdown copy',
+];
 const HERO_CYCLE_COUNT = 3;
+
 const allAchievements = await getCollection('achievements');
+const idOf = (e: typeof allAchievements[number]) => e.id.replace(/\.(md|mdx)$/i, '');
+
+const selectedAchievements = HERO_ACHIEVEMENTS.length > 0
+  ? HERO_ACHIEVEMENTS
+      .map(id => allAchievements.find(a => idOf(a) === id))
+      .filter((a): a is typeof allAchievements[number] => Boolean(a))
+  : allAchievements
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+      .slice(0, HERO_CYCLE_COUNT);
 
 function parseImage(body: string): string | null {
   const m = body.match(/!\[[^\]]*\]\(([^)\s]+)/);
@@ -33,15 +54,22 @@ function parseOverview(body: string): string {
   return raw.replace(/\s+/g, ' ').trim();
 }
 
-const heroAchievements = allAchievements
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, HERO_CYCLE_COUNT)
-  .map(a => ({
-    title:    a.data.title,
-    link:     a.data.link ?? '/achievements',
-    image:    parseImage(a.body),
-    overview: parseOverview(a.body),
-  }));
+const fmtDate = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+
+const heroAchievements = await Promise.all(
+  selectedAchievements.map(async (a) => {
+    const { Content } = await a.render();
+    return {
+      title:    a.data.title,
+      link:     a.data.link ?? '/achievements',
+      issuer:   a.data.issuer,
+      date:     a.data.date,
+      image:    parseImage(a.body),
+      overview: parseOverview(a.body),
+      Content,                       // rendered markdown body for the modal
+    };
+  })
+);
 ---
 
 <BaseLayout title="ardnyx — Security Research, CTF, and Software Dev">
@@ -81,9 +109,9 @@ const heroAchievements = allAchievements
                   )}
                   <div class="cy-slide__body">
                     <p class="cy-slide__overview" data-overview>{a.overview}</p>
-                    <a class="cy-slide__more" href={a.link} target="_blank" rel="noopener" data-more hidden>
+                    <button class="cy-slide__more" type="button" data-more data-modal-target={`ach-modal-${i}`} hidden>
                       Read more…
-                    </a>
+                    </button>
                   </div>
                 </article>
               ))}
@@ -128,6 +156,33 @@ const heroAchievements = allAchievements
       </div>
     </section>
   )}
+
+  <!-- ── Achievement detail modals ─────────────────────── -->
+  {heroAchievements.map((a, i) => {
+    const Body = a.Content;
+    return (
+      <div class="modal" id={`ach-modal-${i}`} data-modal hidden>
+        <div class="modal__backdrop" data-modal-close></div>
+        <div class="modal__dialog" role="dialog" aria-modal="true" aria-label={a.title}>
+          <header class="modal__head">
+            <h2 class="modal__title">{a.title}</h2>
+            <p class="modal__meta">
+              {a.issuer && <span class="modal__issuer">{a.issuer}</span>}
+              <time datetime={a.date.toISOString()}>{fmtDate(a.date)}</time>
+            </p>
+          </header>
+          <div class="modal__content">
+            <Body />
+          </div>
+        </div>
+      </div>
+    );
+  })}
+
+  <!-- Gentle hint shown only while a modal is open -->
+  <div class="esc-toast" data-esc-toast hidden aria-hidden="true">
+    <span class="esc-toast__pill">Press <kbd>ESC</kbd> to close</span>
+  </div>
 
 </BaseLayout>
 
@@ -271,6 +326,10 @@ const heroAchievements = allAchievements
 .cy-slide__more {
   display: inline-block;
   margin-top: 0.65rem;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: 0.04em;
@@ -329,6 +388,163 @@ const heroAchievements = allAchievements
 @media (max-width: 640px) {
   .hero { padding: 3.5rem 0 3rem; }
 }
+
+/* ── Achievement modal ──────────────────────────────────── */
+.modal[hidden] { display: none; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 12, 24, 0.55);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+}
+
+.modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(680px, 100%);
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--bg);
+  border: 1px solid var(--rule-solid);
+  border-radius: 12px;
+  padding: 2rem 2.25rem 2.25rem;
+  box-shadow: 0 24px 60px rgba(20, 12, 24, 0.28);
+  animation: modal-rise 0.28s ease both;
+}
+
+@keyframes modal-rise {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+.modal__head {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule-solid);
+}
+
+.modal__title {
+  font-size: var(--text-2xl, 1.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+}
+
+.modal__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+}
+
+.modal__issuer {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.modal__issuer + time::before {
+  content: '·';
+  margin-right: 0.75rem;
+  color: var(--rule-solid);
+}
+
+/* Rendered markdown body */
+.modal__content :global(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.25rem 0;
+}
+
+.modal__content :global(h1),
+.modal__content :global(h2),
+.modal__content :global(h3) {
+  margin: 1.5rem 0 0.75rem;
+  line-height: 1.25;
+}
+
+.modal__content :global(p) {
+  margin: 0 0 1rem;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+.modal__content :global(ul),
+.modal__content :global(ol) {
+  margin: 0 0 1rem 1.25rem;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+body.modal-open { overflow: hidden; }
+
+/* ── "Press ESC to close" hint ──────────────────────────── */
+.esc-toast[hidden] { display: none; }
+
+.esc-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 110;
+  pointer-events: none;          /* never blocks reading or clicks */
+  transform: translateX(-50%);
+}
+
+.esc-toast__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 90%, black);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  box-shadow: 0 6px 20px rgba(20, 12, 24, 0.25);
+  animation:
+    esc-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+    esc-bob 2.4s ease-in-out 0.5s infinite;
+}
+
+.esc-toast kbd {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  padding: 0.05em 0.4em;
+}
+
+@keyframes esc-pop {
+  from { opacity: 0; transform: translateY(14px) scale(0.85); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+@keyframes esc-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal__dialog,
+  .esc-toast__pill { animation: none; }
+}
 </style>
 
 <script>
@@ -379,4 +595,42 @@ const heroAchievements = allAchievements
   }
 
   document.querySelectorAll<HTMLElement>('[data-cycle]').forEach(initCycle);
+
+  // ── Achievement modals ────────────────────────────────────
+  (function initModals() {
+    const toast = document.querySelector<HTMLElement>('[data-esc-toast]');
+    let open: HTMLElement | null = null;
+
+    function showModal(modal: HTMLElement) {
+      open = modal;
+      modal.hidden = false;
+      document.body.classList.add('modal-open');
+      if (toast) toast.hidden = false;
+    }
+
+    function hideModal() {
+      if (!open) return;
+      open.hidden = true;
+      open = null;
+      document.body.classList.remove('modal-open');
+      if (toast) toast.hidden = true;
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-modal-target]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-modal-target');
+        const modal = id ? document.getElementById(id) : null;
+        if (modal) showModal(modal);
+      });
+    });
+
+    // Click on the darkened/blurred backdrop closes the modal.
+    document.querySelectorAll<HTMLElement>('[data-modal-close]').forEach(el => {
+      el.addEventListener('click', hideModal);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && open) hideModal();
+    });
+  })();
 </script>
