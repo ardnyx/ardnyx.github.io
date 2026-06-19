@@ -38,8 +38,8 @@ const difficultyColor: Record<string, string> = {
       {event && <span class="writeup-card__event">{event}</span>}
       {difficulty && (
         <span
-          class="writeup-card__difficulty"
-          style={`color: ${difficultyColor[difficulty] ?? 'inherit'}`}
+          class={`writeup-card__difficulty${difficulty === 'insane' ? ' writeup-card__difficulty--insane' : ''}`}
+          style={difficulty === 'insane' ? undefined : `color: ${difficultyColor[difficulty] ?? 'inherit'}`}
         >
           {difficulty}
         </span>
@@ -103,6 +103,32 @@ const difficultyColor: Record<string, string> = {
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+/* INSANE — striking, breathing ember-red glow */
+.writeup-card__difficulty--insane {
+  color: #c81e1e;
+  font-weight: 600;
+  animation: insane-breath 2.6s ease-in-out infinite;
+}
+
+@keyframes insane-breath {
+  0%, 100% {
+    text-shadow: 0 0 3px rgba(200, 28, 28, 0.35), 0 0 7px rgba(200, 28, 28, 0.20);
+  }
+  50% {
+    text-shadow:
+      0 0 6px rgba(222, 42, 42, 0.70),
+      0 0 15px rgba(222, 42, 42, 0.45),
+      0 0 26px rgba(222, 42, 42, 0.22);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .writeup-card__difficulty--insane {
+    animation: none;
+    text-shadow: 0 0 5px rgba(210, 35, 35, 0.55), 0 0 12px rgba(210, 35, 35, 0.30);
+  }
 }
 
 .writeup-card__title {
