@@ -4,7 +4,6 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://ardnyx.github.io',
-  base: '/ardnyx.github.io/',
   integrations: [
     mdx(),
     sitemap(),
