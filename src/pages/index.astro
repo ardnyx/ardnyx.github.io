@@ -14,6 +14,34 @@ const allWriteups = await getCollection('writeups');
 const recentWriteups = allWriteups
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 4);
+
+// ── Achievements shown in the hero cycle ─────────────────────
+// Image + overview are parsed out of each achievement's markdown body.
+const HERO_CYCLE_COUNT = 3;
+const allAchievements = await getCollection('achievements');
+
+function parseImage(body: string): string | null {
+  const m = body.match(/!\[[^\]]*\]\(([^)\s]+)/);
+  return m ? m[1] : null;
+}
+
+function parseOverview(body: string): string {
+  // Grab everything after the first "## Overview" heading up to the next
+  // image or heading, then collapse whitespace into a single paragraph.
+  const m = body.match(/##\s*Overview\s*\r?\n+([\s\S]*?)(?:\r?\n!\[|\r?\n#{1,6}\s|$)/);
+  const raw = m ? m[1] : body;
+  return raw.replace(/\s+/g, ' ').trim();
+}
+
+const heroAchievements = allAchievements
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, HERO_CYCLE_COUNT)
+  .map(a => ({
+    title:    a.data.title,
+    link:     a.data.link ?? '/achievements',
+    image:    parseImage(a.body),
+    overview: parseOverview(a.body),
+  }));
 ---
 
 <BaseLayout title="ardnyx — Security Research & CTF">
@@ -21,19 +49,53 @@ const recentWriteups = allWriteups
   <!-- ── Hero ─────────────────────────────────────────── -->
   <section class="hero">
     <div class="container hero__inner">
-      <p class="hero__eyebrow">Computer Science | CTF | Cybersecurity | Systems Programming</p>
-      <h1 class="hero__title">
-        Dann Leyesa<span class="hero__comma"> , </span><br />
-        <em class="hero__sub-title">to achieve high</em>
-      </h1>
-      <p class="hero__body">
-        I write about CTF challenges, (soon) malware analysis, and other security research topics.
-        I also share my personal projects, achievements, and experiments, in this portfolio-blog site. Feel free to connect with me! 
-      </p>
-      <div class="hero__ctas">
-        <a href="/projects"     class="btn btn--primary">View Projects</a>
-        <a href="/writeups"     class="btn btn--ghost">Read Writeups</a>
+      <!-- Left: intro -->
+      <div class="hero__main">
+        <p class="hero__eyebrow">Computer Science | CTF | Cybersecurity | Systems Programming</p>
+        <h1 class="hero__title">
+          Dann Leyesa<span class="hero__comma"> , </span><br />
+          <em class="hero__sub-title">to achieve high</em>
+        </h1>
+        <p class="hero__body">
+          I write about CTF challenges, (soon) malware analysis, and other security research topics.
+          I also share my personal projects, achievements, and experiments, in this portfolio-blog site. Feel free to connect with me!
+        </p>
+        <div class="hero__ctas">
+          <a href="/projects"     class="btn btn--primary">View Projects</a>
+          <a href="/writeups"     class="btn btn--ghost">Read Writeups</a>
+        </div>
       </div>
+
+      <!-- Right: cycling achievements -->
+      {heroAchievements.length > 0 && (
+        <div class="hero__showcase">
+          <p class="hero__showcase-label">Achievements</p>
+          <div class="cycle" data-cycle data-interval="3000">
+            <div class="cycle__viewport">
+              {heroAchievements.map((a, i) => (
+                <article class={`cy-slide${i === 0 ? ' is-active' : ''}`} data-slide>
+                  {a.image && (
+                    <a class="cy-slide__img" href={a.link} target="_blank" rel="noopener">
+                      <img src={a.image} alt={a.title} loading="lazy" />
+                    </a>
+                  )}
+                  <div class="cy-slide__body">
+                    <p class="cy-slide__overview" data-overview>{a.overview}</p>
+                    <a class="cy-slide__more" href={a.link} target="_blank" rel="noopener" data-more hidden>
+                      Read more…
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div class="cycle__controls">
+              <button class="cycle__nav" data-prev aria-label="Previous achievement">←</button>
+              <button class="cycle__nav" data-next aria-label="Next achievement">→</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   </section>
 
@@ -77,7 +139,14 @@ const recentWriteups = allWriteups
 }
 
 .hero__inner {
-  max-width: 780px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.hero__main {
+  min-width: 0;
 }
 
 .hero__eyebrow {
@@ -124,12 +193,190 @@ const recentWriteups = allWriteups
   flex-wrap: wrap;
 }
 
+/* ── Hero achievement cycle ─────────────────────────────── */
+.hero__showcase {
+  min-width: 0;
+}
+
+.hero__showcase-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+
+.cycle {
+  position: relative;
+  border: 1px solid var(--rule-solid);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.cycle__viewport {
+  display: grid;
+}
+
+.cy-slide {
+  grid-area: 1 / 1;            /* stack all slides in one cell */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.cy-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cy-slide__img {
+  display: block;
+  line-height: 0;
+}
+
+.cy-slide__img img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.cy-slide__body {
+  position: relative;
+  padding: 1.25rem 1.5rem 1.5rem;
+  flex: 1;
+}
+
+.cy-slide__overview {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Clamp + fade applied only when the text actually overflows. */
+.cy-slide__overview.is-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+}
+
+.cy-slide__more {
+  display: inline-block;
+  margin-top: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.cy-slide__more:hover {
+  text-decoration: underline;
+}
+
+.cycle__controls {
+  position: absolute;
+  top: 200px;                  /* sit over the image's bottom edge */
+  right: 0.75rem;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 0.4rem;
+}
+
+.cycle__nav {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule-solid);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.cycle__nav:hover {
+  border-color: var(--secondary);
+  color: var(--primary);
+}
+
 /* ── Writeups list ──────────────────────────────────────── */
 .writeups-list {
   border-top: 1px solid var(--rule-solid);
+}
+
+@media (max-width: 860px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .hero__showcase {
+    max-width: 480px;
+  }
 }
 
 @media (max-width: 640px) {
   .hero { padding: 3.5rem 0 3rem; }
 }
 </style>
+
+<script>
+  function initCycle(root: HTMLElement) {
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    if (slides.length === 0) return;
+
+    const interval = Number(root.dataset.interval ?? '3000');
+    let current = slides.findIndex(s => s.classList.contains('is-active'));
+    if (current < 0) current = 0;
+    let timer: number | undefined;
+
+    // Show "Read more" + fade only when the overview overflows its clamp.
+    function applyClamp(slide: HTMLElement) {
+      const overview = slide.querySelector<HTMLElement>('[data-overview]');
+      const more = slide.querySelector<HTMLElement>('[data-more]');
+      if (!overview) return;
+      overview.classList.add('is-clamped');
+      const overflowing = overview.scrollHeight > overview.clientHeight + 1;
+      if (!overflowing) overview.classList.remove('is-clamped');
+      if (more) more.hidden = !overflowing;
+    }
+
+    function show(next: number) {
+      current = (next + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === current));
+    }
+
+    function start() {
+      stop();
+      if (slides.length > 1) timer = window.setInterval(() => show(current + 1), interval);
+    }
+    function stop() {
+      if (timer) { window.clearInterval(timer); timer = undefined; }
+    }
+
+    root.querySelector('[data-next]')?.addEventListener('click', () => { show(current + 1); start(); });
+    root.querySelector('[data-prev]')?.addEventListener('click', () => { show(current - 1); start(); });
+
+    // Pause while interacting so a manual override isn't yanked away.
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+
+    // Measure each slide once layout is ready.
+    slides.forEach(applyClamp);
+    show(current);
+    start();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-cycle]').forEach(initCycle);
+</script>
