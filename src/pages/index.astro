@@ -147,7 +147,7 @@ const heroAchievements = await Promise.all(
     <section class="section section--alt">
       <div class="container">
         <p class="section-label">Featured Writeups</p>
-        <div class="writeups-list" data-wu-fx>
+        <div class="writeups-list">
           {recentWriteups.map(writeup => (
             <WriteupCard writeup={writeup} />
           ))}
@@ -156,8 +156,6 @@ const heroAchievements = await Promise.all(
       </div>
     </section>
   )}
-
-  {recentWriteups.length > 0 && <canvas id="wu-fx" aria-hidden="true"></canvas>}
 
   <!-- ── Achievement detail modals ─────────────────────── -->
   {heroAchievements.map((a, i) => {
@@ -397,7 +395,7 @@ const heroAchievements = await Promise.all(
 .modal {
   position: fixed;
   inset: 0;
-  z-index: 1000;          /* above the writeup cloud overlay (150) */
+  z-index: 100;
   display: grid;
   place-items: center;
   padding: 1.5rem;
@@ -503,7 +501,7 @@ body.modal-open { overflow: hidden; }
   position: fixed;
   left: 50%;
   bottom: 1.5rem;
-  z-index: 1010;                 /* above modal (1000) and cloud (150) */
+  z-index: 110;
   pointer-events: none;          /* never blocks reading or clicks */
   transform: translateX(-50%);
 }
@@ -548,30 +546,6 @@ body.modal-open { overflow: hidden; }
   .esc-toast__pill { animation: none; }
 }
 
-/* ── Writeup hover FX (cloud vignette + insane text corruption) ── */
-#wu-fx {
-  position: fixed;
-  inset: 0;
-  z-index: 150;           /* above the sticky nav (100) so the cloud covers it too */
-  pointer-events: none;
-  display: none;          /* enabled by JS only on hover-capable devices */
-}
-
-.writeup-card .ch { display: inline; }
-.writeup-card .ch.corrupt {
-  color: #d8362a;
-  text-shadow: 0 0 7px rgba(216, 54, 42, 0.85);
-}
-.writeup-card .ch.shine {
-  color: #ffe7a0;
-  text-shadow: 0 0 8px rgba(255, 205, 110, 0.95), 0 0 17px rgba(255, 170, 70, 0.55);
-  animation: wu-shine 0.6s ease;
-}
-@keyframes wu-shine {
-  0%   { filter: brightness(1); }
-  35%  { filter: brightness(2.4); }
-  100% { filter: brightness(1); }
-}
 </style>
 
 <script>
@@ -660,210 +634,4 @@ body.modal-open { overflow: hidden; }
       if (e.key === 'Escape' && open) hideModal();
     });
   })();
-</script>
-
-<script>
-  import * as THREE from 'three';
-
-  const canvas = document.getElementById('wu-fx');
-  const list = document.querySelector('[data-wu-fx]');
-  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-  if (canvas && list && canHover) {
-    const MOTION = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    canvas.style.display = 'block';
-
-    const FX = {
-      medium: { tint:[1.00,0.72,0.30], dark:[0.055,0.040,0.050], veil:0.52, tintAmt:0.60, hint:0.00,
-                inner:45, outer:640, core:0.00, floor:0.30, through:0.30, irr:0.13, gusty:false },
-      hard:   { tint:[0.88,0.20,0.12], dark:[0.055,0.022,0.024], veil:0.78, tintAmt:0.62, hint:0.05,
-                inner:40, outer:560, core:0.07, floor:0.46, through:0.36, irr:0.18, gusty:false },
-      insane: { tint:[0.40,0.055,0.05], dark:[0.016,0.007,0.010], veil:1.00, tintAmt:0.55, hint:0.12,
-                inner:30, outer:500, core:0.17, floor:0.90, through:0.60, irr:0.27, gusty:true }
-    };
-
-    const frag = `
-      precision highp float;
-      uniform vec2 uRes; uniform vec2 uMouse; uniform float uPhase; uniform float uWind;
-      uniform float uActive; uniform float uVeil; uniform float uTintAmt; uniform float uHint;
-      uniform float uInner; uniform float uOuter; uniform float uCore; uniform float uFloor;
-      uniform float uThrough; uniform float uIrr; uniform vec3 uTint; uniform vec3 uDark;
-      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
-      float noise(vec2 p){ vec2 i=floor(p),f=fract(p);
-        float a=hash(i),b=hash(i+vec2(1.,0.)),c=hash(i+vec2(0.,1.)),d=hash(i+vec2(1.,1.));
-        vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y); }
-      float fbm(vec2 p){ float v=0.,a=0.5; for(int i=0;i<5;i++){ v+=a*noise(p); p*=2.02; a*=0.5; } return v; }
-      void main(){
-        vec2 uv = gl_FragCoord.xy/uRes;
-        vec2 muv = vec2(uMouse.x, uRes.y-uMouse.y)/uRes;
-        float aspect = uRes.x/uRes.y;
-        float dist = length(vec2((uv.x-muv.x)*aspect, uv.y-muv.y));
-        float t = uPhase;
-        vec2 p = vec2(uv.x*aspect, uv.y)*3.0;
-        float warp = fbm(p*0.6 - vec2(t*0.7, t));
-        float warp2 = fbm(p*1.5 + vec2(-t*1.4, t*0.9));
-        float cloud = fbm(p + vec2(t, t*0.5) + warp*(0.7 + uWind*0.6) + warp2*(0.25 + uWind*0.4));
-        cloud = clamp(cloud, 0.0, 1.0);
-        float edge = dist + (warp-0.5)*uIrr + (warp2-0.5)*uIrr*0.6;
-        float ramp = smoothstep(uInner/uRes.y, uOuter/uRes.y, edge);
-        float vig = mix(uCore, 1.0, ramp);
-        float through = (1.0-ramp) * smoothstep(0.48,0.92,cloud) * uThrough * (0.7 + uWind*0.6);
-        vec3 col = mix(uDark, uTint, cloud*uTintAmt);
-        col = mix(col, vec3(1.0,0.82,0.32), smoothstep(0.74,1.0,cloud)*uHint);
-        float dens = uFloor + (1.0-uFloor)*cloud;
-        float alpha = uActive * uVeil * (vig*dens + through);
-        gl_FragColor = vec4(col, clamp(alpha,0.0,1.0));
-      }`;
-    const vert = 'void main(){ gl_Position = vec4(position.xy,0.0,1.0); }';
-
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    const scene = new THREE.Scene();
-    const camera = new THREE.Camera();
-
-    const U = {
-      uRes:{value:new THREE.Vector2()}, uMouse:{value:new THREE.Vector2(-9999,-9999)},
-      uPhase:{value:0}, uWind:{value:1}, uActive:{value:0}, uVeil:{value:0.6}, uTintAmt:{value:0.6},
-      uHint:{value:0}, uInner:{value:150}, uOuter:{value:620}, uCore:{value:0}, uFloor:{value:0.3},
-      uThrough:{value:0.22}, uIrr:{value:0.12},
-      uTint:{value:new THREE.Color(1,0.72,0.3)}, uDark:{value:new THREE.Color(0.05,0.04,0.05)}
-    };
-    const mat = new THREE.ShaderMaterial({ uniforms:U, vertexShader:vert, fragmentShader:frag, transparent:true });
-    scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat));
-
-    function resize(){
-      const w = window.innerWidth, h = window.innerHeight;
-      renderer.setSize(w, h, false);
-      U.uRes.value.set(w*renderer.getPixelRatio(), h*renderer.getPixelRatio());
-    }
-    window.addEventListener('resize', resize); resize();
-
-    const tgtMouse = { x:-9999, y:-9999 };
-    const tgt = { active:0, veil:0.6, tintAmt:0.6, hint:0, inner:150, outer:620, core:0, floor:0.3,
-                  through:0.22, irr:0.12, tint:new THREE.Color(1,0.72,0.3), dark:new THREE.Color(0.05,0.04,0.05) };
-    let gusty = false;
-
-    function setDiff(d){
-      const f = FX[d]; if (!f) return;
-      tgt.tint.setRGB(f.tint[0],f.tint[1],f.tint[2]);
-      tgt.dark.setRGB(f.dark[0],f.dark[1],f.dark[2]);
-      tgt.veil=f.veil; tgt.tintAmt=f.tintAmt; tgt.hint=f.hint;
-      tgt.inner=f.inner; tgt.outer=f.outer; tgt.core=f.core; tgt.floor=f.floor;
-      tgt.through=f.through; tgt.irr=f.irr; gusty=f.gusty;
-    }
-
-    document.addEventListener('mousemove', (e) => {
-      tgtMouse.x = e.clientX*renderer.getPixelRatio();
-      tgtMouse.y = e.clientY*renderer.getPixelRatio();
-    });
-
-    // ── insane text corruption + shine ──
-    const GLYPHS = '日ﾊﾐﾋｰｳｼﾅﾓﾆﾔﾇﾈ012789#%&$@/<>*+=≡≠█▓░'.split('');
-    const randGlyph = () => GLYPHS[(Math.random()*GLYPHS.length)|0];
-    let cTimer = null, cEls = null;
-
-    function wrapChars(el){
-      if (el.dataset.wrapped) return;
-      const text = el.textContent; el.textContent=''; el.dataset.wrapped='1';
-      for (let i=0;i<text.length;i++){
-        const s = document.createElement('span');
-        s.className='ch'; s.textContent=text[i]; s.dataset.ch=text[i];
-        el.appendChild(s);
-      }
-    }
-    function unwrapChars(el){
-      if (!el.dataset.wrapped) return;
-      let t=''; el.querySelectorAll('.ch').forEach(s => { t+=s.dataset.ch; });
-      el.textContent=t; delete el.dataset.wrapped;
-    }
-    function corruptChar(s){
-      if (s.dataset.busy) return; s.dataset.busy='1'; s.classList.add('corrupt');
-      let flips=2+((Math.random()*3)|0), fi=0;
-      const iv = setInterval(() => {
-        s.textContent = randGlyph();
-        if (++fi>=flips){ clearInterval(iv);
-          setTimeout(() => { s.textContent=s.dataset.ch; s.classList.remove('corrupt'); delete s.dataset.busy; },
-            70+Math.random()*140);
-        }
-      }, 55);
-    }
-    function shineChar(s){ s.classList.add('shine'); setTimeout(() => s.classList.remove('shine'), 620); }
-    function startCorruption(card){
-      if (!MOTION) return;
-      stopCorruption();
-      cEls = [card.querySelector('.writeup-card__title a'), card.querySelector('.writeup-card__desc')].filter(Boolean);
-      cEls.forEach(wrapChars);
-      const chars = [];
-      cEls.forEach(el => el.querySelectorAll('.ch').forEach(s => { if (s.dataset.ch!==' ') chars.push(s); }));
-      if (!chars.length) return;
-      cTimer = setInterval(() => {
-        const n = 1+((Math.random()*2)|0);
-        for (let i=0;i<n;i++){ if (Math.random()<0.9) corruptChar(chars[(Math.random()*chars.length)|0]); }
-        if (Math.random()<0.55) shineChar(chars[(Math.random()*chars.length)|0]);
-      }, 130);
-    }
-    function stopCorruption(){
-      if (cTimer){ clearInterval(cTimer); cTimer=null; }
-      if (cEls){ cEls.forEach(el => {
-        el.querySelectorAll('.ch').forEach(s => { s.textContent=s.dataset.ch; s.className='ch'; delete s.dataset.busy; });
-        unwrapChars(el);
-      }); cEls=null; }
-    }
-
-    list.querySelectorAll('.writeup-card').forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        const d = card.dataset.difficulty;
-        stopCorruption();
-        if (!FX[d]) { tgt.active = 0; return; }   // easy / none → nothing
-        setDiff(d); tgt.active = 1; ensureLoop();
-        if (d === 'insane') startCorruption(card);
-      });
-    });
-    list.addEventListener('mouseleave', () => { tgt.active = 0; stopCorruption(); });
-
-    // ── wind gusts (insane) ──
-    const k = (dt,tau) => 1-Math.exp(-dt/tau);
-    let windPhase=0, wind=1, windTarget=1, windTimer=0;
-    function stepWind(dt){
-      if (!MOTION){ wind=0; return; }
-      windTimer -= dt;
-      if (windTimer<=0){
-        windTimer = 1.4 + Math.random()*3.4;
-        windTarget = gusty
-          ? (Math.random()<0.32 ? 0.20+Math.random()*0.30 : 0.9+Math.random()*2.2)
-          : 0.85 + Math.random()*0.4;
-      }
-      wind += (windTarget-wind)*k(dt,0.9);
-      windPhase += dt*wind*0.03;
-    }
-
-    // ── loop with idle pause ──
-    let running=false, last=0;
-    function ensureLoop(){ if (!running){ running=true; last=performance.now(); requestAnimationFrame(loop); } }
-    function loop(now){
-      const dt = Math.min((now-last)/1000, 0.1); last=now;
-      stepWind(dt);
-      const km=k(dt,0.10), kc=k(dt,0.45), ka=k(dt,0.50);
-      if (U.uMouse.value.x<-9000) U.uMouse.value.set(tgtMouse.x, tgtMouse.y);
-      U.uMouse.value.x += (tgtMouse.x-U.uMouse.value.x)*km;
-      U.uMouse.value.y += (tgtMouse.y-U.uMouse.value.y)*km;
-      U.uPhase.value = windPhase;
-      U.uWind.value += (wind-U.uWind.value)*k(dt,0.6);
-      U.uActive.value += (tgt.active-U.uActive.value)*ka;
-      U.uVeil.value += (tgt.veil-U.uVeil.value)*kc;
-      U.uTintAmt.value += (tgt.tintAmt-U.uTintAmt.value)*kc;
-      U.uHint.value += (tgt.hint-U.uHint.value)*kc;
-      U.uInner.value += (tgt.inner-U.uInner.value)*kc;
-      U.uOuter.value += (tgt.outer-U.uOuter.value)*kc;
-      U.uCore.value += (tgt.core-U.uCore.value)*kc;
-      U.uFloor.value += (tgt.floor-U.uFloor.value)*kc;
-      U.uThrough.value += (tgt.through-U.uThrough.value)*kc;
-      U.uIrr.value += (tgt.irr-U.uIrr.value)*kc;
-      U.uTint.value.lerp(tgt.tint, kc);
-      U.uDark.value.lerp(tgt.dark, kc);
-      renderer.render(scene, camera);
-      if (tgt.active===0 && U.uActive.value<0.004){ running=false; return; }  // idle: stop rendering
-      requestAnimationFrame(loop);
-    }
-  }
 </script>
