@@ -10,7 +10,7 @@ featured: true
 ---
 
 ## Overview
-There are 6 phases in the binary bomb lab.
+There are 6 phases in the binary bomb lab. To be honest, this is just a laboratory exercise from **Carnegie Mellon University**, but it is such a good reverse engineering exercise that I improved my debugging skills, reading assembly, mapping them out to a higher-level logic, and even how datas are structured according to endianness and their placements in the virtual memory. 
 
 ## Phase 1
 Dump of assembler code for function phase_1:
