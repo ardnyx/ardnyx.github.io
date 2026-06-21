@@ -246,8 +246,8 @@ YES I AM CORRECT! I THINK THIS IS A SERIES OF SWITCH STATEMENTS? Well, that mean
 ```
 Eyy! Let's go!
 ## Phase 4
-
+> Finished but not yet documented.
 ## Phase 5
-
+> Finished but not yet documented.
 ## Phase 6
-
+> Not yet finished, took a break.
