@@ -4,7 +4,7 @@ description: "A simple binary exploitation problem that involves a stack-based b
 date: 2026-07-24
 category: ctf
 tags: ["c", "pwn"]
-difficulty: very easy
+difficulty: easy
 event: "HackTheBox"
 featured: false
 ---
