@@ -8,12 +8,7 @@ difficulty: medium
 event: "picoCTF"
 featured: true
 ---
-`Reverse-Engineering` <mark style="background-color: #3d2a1d; color: #e5a93c; border-radius: 10px; padding: 2px 8px; font-size: 0.85em;">Medium</mark> 
-<font color="#7a7a7a">by Yahaya Meddy</font>
-
-What's behind the numeric gate? You only get access if you enter the *right* kind of number. You can download the program file [here](https://example.com).
-
----
+## Information Gathering
 Upon starting the challenge, I immediately downloaded the file and got this gatekeeper ELF64 (elf.dll).
 
 Looking at the functions in IDA, there are some *interesting* functions in here, namely:

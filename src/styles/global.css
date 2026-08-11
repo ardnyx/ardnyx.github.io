@@ -17,7 +17,8 @@
   /* Typography */
   --font-display: 'Fraunces', Georgia, serif;
   --font-body:    'Inter', system-ui, sans-serif;
-  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+  --font-mono:    'Inter', system-ui, sans-serif;
+  --font-code:    'JetBrains Mono', 'Fira Code', monospace;
 
   /* Type scale */
   --text-xs:   0.75rem;
@@ -96,7 +97,7 @@ a:hover {
 }
 
 code {
-  font-family: var(--font-mono);
+  font-family: var(--font-code);
   font-size: 0.875em;
   background: var(--surface);
   color: var(--primary);
@@ -107,7 +108,7 @@ code {
 
 /* Shiki code blocks */
 pre {
-  font-family: var(--font-mono);
+  font-family: var(--font-code);
   font-size: var(--text-sm);
   border-radius: 8px;
   padding: 1.5rem;
@@ -130,8 +131,8 @@ blockquote {
   margin: 2rem 0;
   color: var(--ink-muted);
   font-style: italic;
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
 }
 
 blockquote p { margin-bottom: 0; }
@@ -200,7 +201,7 @@ td {
 }
 
 .section-label::before {
-  content: '✦';
+  content: '—';
   font-size: 0.65rem;
   color: var(--accent);
 }

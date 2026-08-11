@@ -4,7 +4,7 @@ description: "6 phases of increasing assembly debugging challenges in increasing
 date: 2026-06-20
 category: ctf
 tags: ["c", "x86-64 asm", "debugging"]
-difficulty: insane
+difficulty: hard
 event: "CMU Lab Assignments"
 featured: true
 ---

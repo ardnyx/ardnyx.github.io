@@ -8,12 +8,6 @@ difficulty: medium
 event: "picoCTF"
 featured: true
 ---
-
-## WinAntiDbg0x100
-
-**Category:** Reverse Engineering - Medium  
-**Author:** Nandan Desai
-
 ## Introduction
 
 This challenge introduces **Anti-Debugging** techniques.
