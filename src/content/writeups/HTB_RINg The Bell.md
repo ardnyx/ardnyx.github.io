@@ -46,7 +46,9 @@ We immediately go to the `main` function and inspect the decompilation:
   return 0;
 ```
 
-The line `_QWORD buf[4];` and the line `read(0, buf, 0x60u);` is already a huge hint. We have just allocated 32 bytes of buffer, but we can `read` 90 bytes. That means we are able to put bytes beyond what the buffer can hold, which means we can overwrite what is written in memory beyond that.
+The line `_QWORD buf[4];` and the line `read(0, buf, 0x60u);` is already a huge hint. We have just allocated 32 bytes of buffer, but we can `read` 96 bytes. That means we are able to put bytes beyond what the buffer can hold, which means we can overwrite what is written in memory beyond that. This specific line also means:
+
+> Read from standard input (`stdin`), put it into the buffer, and can read 0x60 bytes (96 bytes)
 
 The decompilation of the main function does not provide any more useful information other than this. The next step would be to look at other defined functions. There are a few, but one function's contents stands out:
 
